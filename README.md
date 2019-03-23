@@ -1,6 +1,12 @@
+[![codecov](https://codecov.io/gh/swimyoung/dom-find-and-replace/branch/master/graph/badge.svg)](https://codecov.io/gh/swimyoung/dom-find-and-replace)
+
 # DOM find and replace
 
 Find some text in the dom and replace with what you want
+
+## Demo
+
+https://swimyoung.github.io/dom-find-and-replace/
 
 ## Getting started
 
@@ -8,22 +14,44 @@ Find some text in the dom and replace with what you want
 npm install dom-find-and-replace
 ```
 
-```js
-import findAndReplace from 'dom-find-and-replace';
+### ES Module
 
-findAndReplace(document.getElementById('container'), {
+```js
+import domFindAndReplace from 'dom-find-and-replace';
+
+domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
   replace: 'hi',
 });
 
 // return value: '<div>hi</div>'
-findAndReplace(`<div>hello</div>`, {
+domFindAndReplace(`<div>hello</div>`, {
   find: 'hello',
   replace: 'hi',
 });
 ```
 
-### findAndReplace
+### UMD
+
+```html
+<script src="node_modules/dom-find-and-replace/dist/domFindAndReplace.js"></script>
+<script>
+  domFindAndReplace(document.getElementById('container'), {
+    find: 'hello',
+    replace: 'hi',
+  });
+
+  // return value: '<div>hi</div>'
+  domFindAndReplace(`<div>hello</div>`, {
+    find: 'hello',
+    replace: 'hi',
+  });
+</script>
+```
+
+## API
+
+### domFindAndReplace
 
 #### Arguments
 
@@ -40,16 +68,16 @@ findAndReplace(`<div>hello</div>`, {
 #### Examples
 
 ```js
-import findAndReplace from 'dom-find-and-replace';
+import domFindAndReplace from 'dom-find-and-replace';
 
 // find 'hello' in id 'container' element and replace it with 'hi'
-findAndReplace(document.getElementById('container'), {
+domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
   replace: 'hi',
 });
 
 // find 'hello' in id 'container' element and wrap with bold element
-findAndReplace(document.getElementById('container'), {
+domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
 
   /**
@@ -69,10 +97,10 @@ findAndReplace(document.getElementById('container'), {
 ```
 
 ```js
-import findAndReplace from 'dom-find-and-replace';
+import domFindAndReplace from 'dom-find-and-replace';
 
 // find link in id 'root' element and make an anchor element
-findAndReplace(document.getElementById('root'), {
+domFindAndReplace(document.getElementById('root'), {
   flag: 'gi',
 
   // @see https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url for url matching regular expression
