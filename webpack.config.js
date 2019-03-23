@@ -6,6 +6,7 @@ module.exports = {
     path: __dirname,
     filename: `[name].js`,
     library: 'domFindAndReplace',
+    libraryExport: 'default',
     libraryTarget: 'umd',
   },
   mode: 'production',
