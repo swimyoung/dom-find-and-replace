@@ -44,7 +44,7 @@ export function SectionFindAndReplace() {
         />
         <p>
           detail at{' '}
-          <a href="https://github.com/swimyoung/dom/blob/v1.1.0/packages/dom-findandreplace/README.md">
+          <a href="https://github.com/swimyoung/dom-find-and-replace/blob/master/README.md">
             README.md
           </a>
         </p>
