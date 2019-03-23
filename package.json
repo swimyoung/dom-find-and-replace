@@ -4,6 +4,10 @@
   "description": "Find some text in the dom and replace with what you want",
   "main": "dist/index.js",
   "author": "Youngjin Jang",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/swimyoung/dom-find-and-replace"
+  },
   "license": "MIT",
   "scripts": {
     "start": "npm run dev",
