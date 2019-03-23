@@ -1,0 +1,10 @@
+**/.vscode/**
+**/coverage/**
+**/demo/**
+**/src/**
+**/.travis.yml
+**/.babelrc.js
+**/.eslintignore
+**/.eslintrc.js
+**/node_modules/**
+**/webpack.config.js
