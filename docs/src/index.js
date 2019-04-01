@@ -1,6 +1,3 @@
-require('normalize.css');
-require('./index.scss');
-
 import Chance from 'chance';
 import randomColor from 'randomcolor';
 import findAndReplace from '../../src/index';

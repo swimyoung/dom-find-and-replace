@@ -6,7 +6,11 @@ const production = process.env.NODE_ENV === 'production';
 const hash = production ? 'contenthash' : 'hash';
 
 module.exports = {
-  entry: `${__dirname}/src/index.js`,
+  entry: [
+    'normalize.css',
+    `${__dirname}/src/index.scss`,
+    `${__dirname}/src/index.js`,
+  ],
   output: {
     path: `${__dirname}/bundle`,
     filename: `[name].[${hash}].js`,
