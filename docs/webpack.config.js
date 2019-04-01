@@ -1,14 +1,14 @@
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
-const ENV_IS_PRODUCTION = process.env.NODE_ENV === 'production';
-const hash = ENV_IS_PRODUCTION ? 'contenthash' : 'hash';
-const outputPath = `${__dirname}/bundle`;
+const dev = process.env.NODE_ENV === 'development';
+const hash = dev ? 'hash' : 'contenthash';
 
 module.exports = {
   entry: `${__dirname}/src/index.js`,
   output: {
-    path: outputPath,
+    path: `${__dirname}/bundle`,
     filename: `[name].[${hash}].js`,
     chunkFilename: `[name].[${hash}].js`,
     hashDigestLength: 5,
@@ -16,8 +16,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['css-loader'],
+        test: /\.scss|\.css/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
       },
       {
         test: /\.js[x]?$/,
@@ -27,7 +27,6 @@ module.exports = {
           options: {
             extends: `${__dirname}/../babel.config.js`,
             presets: [
-              '@babel/react',
               [
                 '@babel/preset-env',
                 {
@@ -49,12 +48,18 @@ module.exports = {
     },
   },
   plugins: [
-    ...(ENV_IS_PRODUCTION ? [new CleanWebpackPlugin()] : []),
+    ...(dev ? [] : [new CleanWebpackPlugin()]),
+    new MiniCssExtractPlugin({
+      filename: `[name].[${hash}].css`,
+    }),
     new HTMLWebpackPlugin({
       template: `${__dirname}/src/index.html`,
-      filename: '../index.html',
+      filename: `${dev ? '' : '../'}index.html`,
     }),
   ],
-  mode: process.env.NODE_ENV,
-  devtool: ENV_IS_PRODUCTION ? 'source-map' : 'inline-source-map',
+  mode: dev ? 'development' : 'production',
+  devtool: dev ? 'inline-source-map' : 'source-map',
+  devServer: {
+    contentBase: 'docs',
+  },
 };
