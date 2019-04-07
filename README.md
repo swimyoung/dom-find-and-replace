@@ -2,6 +2,8 @@
 
 # DOM find and replace
 
+![](https://media.giphy.com/media/Rkc2v78RSzoP2rdlXO/giphy.gif)
+
 Find some text in the dom and replace with what you want
 
 ## Demo
