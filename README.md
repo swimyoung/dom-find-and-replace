@@ -84,7 +84,7 @@ domFindAndReplace(document.getElementById('container'), {
    * @param {object} param
    * @param {string} param.offsetText regular expression matching text.
    *  It might be part of matching text or whole part.
-   * @param {string} param.offsetNode regular expression matching text node.
+   * @param {TextNode} param.offsetNode regular expression matching text node.
    *  It might be part of matching text node or whole part.
    * @param {RegExpExecArray} param.regExpExecArray regular expression exec's result of
    *  matching text @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/exec
