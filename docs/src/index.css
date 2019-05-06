@@ -18,10 +18,10 @@ main {
 
 #header {
   text-align: center;
+}
 
-  h1 {
-    margin: 2em 0;
-  }
+#header h1 {
+  margin: 2em 0;
 }
 
 #body {
@@ -32,28 +32,26 @@ main {
   max-width: 960px;
 
   grid-template-columns: 100%;
+}
 
-  article {
-    h2 {
-      margin-top: 0;
-    }
+#body article h2 {
+  margin-top: 0;
+}
 
-    .query {
-      border: 1px solid #dedede;
-      width: 100%;
-      padding: 0.5em 0.7em;
-      box-sizing: border-box;
-    }
+#body article .query {
+  border: 1px solid #dedede;
+  width: 100%;
+  padding: 0.5em 0.7em;
+  box-sizing: border-box;
+}
 
-    .content {
-      border: 1px solid #dedede;
-      padding: 1em;
-      height: 100%;
-      width: 100%;
-      word-break: break-all;
-      overflow: auto;
-    }
-  }
+#body article .content {
+  border: 1px solid #dedede;
+  padding: 1em;
+  height: 100%;
+  width: 100%;
+  word-break: break-all;
+  overflow: auto;
 }
 
 #footer {

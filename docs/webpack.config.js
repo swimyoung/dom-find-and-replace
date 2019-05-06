@@ -8,7 +8,7 @@ const hash = production ? 'contenthash' : 'hash';
 module.exports = {
   entry: [
     'normalize.css',
-    `${__dirname}/src/index.scss`,
+    `${__dirname}/src/index.css`,
     `${__dirname}/src/index.js`,
   ],
   output: {
@@ -20,8 +20,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss|\.css/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        test: /\.css/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
         test: /\.js[x]?$/,

@@ -1,2 +1,0 @@
-html{box-sizing:border-box}body{font-family:'Courier New', Courier, monospace}*,*:before,*:after{box-sizing:inherit}main{padding:0 1em}#header{text-align:center}#header h1{margin:2em 0}#body{display:grid;grid-auto-rows:auto;grid-gap:1em;margin:0 auto;max-width:960px;grid-template-columns:100%}#body article h2{margin-top:0}#body article .query{border:1px solid #dedede;width:100%;padding:0.5em 0.7em;box-sizing:border-box}#body article .content{border:1px solid #dedede;padding:1em;height:100%;width:100%;word-break:break-all;overflow:auto}#footer{margin:4em 0;text-align:center}
-
