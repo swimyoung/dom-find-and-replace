@@ -2,7 +2,9 @@
 
 # DOM find and replace
 
-![](https://media.giphy.com/media/Rkc2v78RSzoP2rdlXO/giphy.gif)
+<p align="center">
+  <img src="https://media.giphy.com/media/Rkc2v78RSzoP2rdlXO/giphy.gif" alt="demo gif" />
+</p>
 
 Find some text in the dom and replace with what you want
 
