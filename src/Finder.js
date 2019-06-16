@@ -179,7 +179,7 @@ export default class Finder {
     while (current.previous) {
       current = current.previous;
     }
-    
+
     while (current) {
       const { next } = current;
       if (current === textNodeRange) {
