@@ -1,4 +1,5 @@
 .vscode
+coverage
 **/node_modules
 # Created by https://www.gitignore.io/api/node,macos,windows,visualstudiocode
 

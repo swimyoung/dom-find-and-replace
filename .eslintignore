@@ -2,4 +2,4 @@ dist
 coverage
 .vscode
 node_modules
-bundle
+bundles

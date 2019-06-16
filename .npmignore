@@ -1,6 +1,5 @@
 **/.vscode/**
 **/coverage/**
-**/demo/**
 **/src/**
 **/.travis.yml
 **/.babelrc.js

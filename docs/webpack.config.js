@@ -1,6 +1,6 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const production = process.env.NODE_ENV === 'production';
 const hash = production ? 'contenthash' : 'hash';
@@ -12,7 +12,7 @@ module.exports = {
     `${__dirname}/src/index.js`,
   ],
   output: {
-    path: `${__dirname}/bundle`,
+    path: `${__dirname}/bundles`,
     filename: `[name].[${hash}].js`,
     chunkFilename: `[name].[${hash}].js`,
     hashDigestLength: 5,
@@ -24,7 +24,7 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.js[x]?$/,
+        test: /\.js/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -46,11 +46,7 @@ module.exports = {
       },
     ],
   },
-  optimization: {
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
+  optimization: { splitChunks: { chunks: 'all' } },
   plugins: [
     ...(production ? [new CleanWebpackPlugin()] : []),
     new MiniCssExtractPlugin({
