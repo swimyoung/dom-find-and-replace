@@ -83,7 +83,6 @@ domFindAndReplace(document.getElementById('container'), {
 // find 'hello' in id 'container' element and wrap with bold element
 domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
-
   /**
    * @param {object} param
    * @param {string} param.offsetText regular expression matching text.
