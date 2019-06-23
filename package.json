@@ -1,6 +1,6 @@
 {
   "name": "dom-find-and-replace",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Find some text in the dom and replace with what you want",
   "main": "dist/index.js",
   "author": "Youngjin Jang",
