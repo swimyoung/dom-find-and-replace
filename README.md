@@ -1,4 +1,4 @@
-[![codecov](https://codecov.io/gh/swimyoung/dom-find-and-replace/branch/master/graph/badge.svg)](https://codecov.io/gh/swimyoung/dom-find-and-replace)
+[![codecov](https://codecov.io/gh/swimyoung/dom-find-and-replace/branch/master/graph/badge.svg)](https://codecov.io/gh/swimyoung/dom-find-and-replace) [![Build Status](https://travis-ci.org/swimyoung/dom-find-and-replace.svg?branch=master)](https://travis-ci.org/swimyoung/dom-find-and-replace)
 
 # DOM find and replace
 

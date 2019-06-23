@@ -124,7 +124,7 @@ describe('Finder', () => {
       root = document.createElement('div');
       textNode = document.createTextNode('HelloWorldHelloWorld');
       root.appendChild(textNode);
-      
+
       finder = new Finder(root);
     });
 
