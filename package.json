@@ -18,7 +18,7 @@
     "lint": "eslint .",
     "dev": "webpack-dev-server --config ./docs/webpack.config.js",
     "docs": "cross-env NODE_ENV=production webpack -p --config ./docs/webpack.config.js",
-    "transpile": "babel src -d dist --ignore '**/*.spec.js'",
+    "transpile": "babel src -d dist --ignore '**/*.test.js'",
     "bundle": "webpack -p",
     "dist": "rimraf dist && run-p transpile bundle docs"
   },
