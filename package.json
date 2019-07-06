@@ -18,9 +18,9 @@
     "lint": "eslint .",
     "dev": "webpack-dev-server --config ./docs/webpack.config.js",
     "docs": "cross-env NODE_ENV=production webpack -p --config ./docs/webpack.config.js",
-    "compile": "babel src -d dist --ignore '**/*.spec.js'",
+    "transpile": "babel src -d dist --ignore '**/*.spec.js'",
     "bundle": "webpack -p",
-    "dist": "rimraf dist && run-p compile bundle docs"
+    "dist": "rimraf dist && run-p transpile bundle docs"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.4",
@@ -57,7 +57,6 @@
     "@babel/runtime": "^7.4.5",
     "lodash": "^4.17.11"
   },
-  "sideEffects": false,
   "prettier": {
     "singleQuote": true,
     "printWidth": 80,
