@@ -9,9 +9,9 @@ module.exports = {
     sourceType: 'module',
   },
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-  rules: [
+  rules: {
     'no-console': 'off'
-  ],
+  },
   overrides: [
     {
       files: ['**/*.test.js'],
