@@ -57,28 +57,25 @@ ${Array.from({ length: 1 }).reduce(
 
   const [elQuery] = document.getElementsByClassName('query');
   const [elContent] = document.getElementsByClassName('content');
+  let recover;
 
   elContent.innerHTML = initialContent;
   elQuery.addEventListener('keyup', ({ target: { value } }) => {
-    let previousRegExpExecArray;
+    let previousFoundText;
     let color = randomColor();
-    let content = initialContent;
 
-    try {
-      content = findAndReplace(content, {
-        find: value,
-        replace: ({ offsetText, regExpExecArray }) => {
-          color =
-            previousRegExpExecArray !== regExpExecArray ? randomColor() : color;
+    recover && recover();
+    recover = findAndReplace(elContent, {
+      find: value,
+      replace: ({ offsetText, foundText }) => {
+        color = previousFoundText !== foundText ? randomColor() : color;
+        previousFoundText = foundText;
 
-          previousRegExpExecArray = regExpExecArray;
-          return `<span style="background-color: ${color};">${offsetText}</span>`;
-        },
-      });
-    } catch (e) {
-      return;
-    }
-
-    elContent.innerHTML = content;
+        const span = document.createElement('span');
+        span.textContent = offsetText;
+        span.setAttribute('style', 'background-color: ' + color + ';');
+        return span;
+      },
+    });
   });
 })();

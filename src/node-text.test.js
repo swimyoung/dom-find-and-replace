@@ -1,7 +1,7 @@
 import {
   getTextNodes,
   getTextNodesDividedByBlock,
-  getTextWithTextBoundaryFromTextNodes,
+  getTextWithTextRanges,
 } from './node-text';
 
 const removeTagSpaceInHTML = html =>
@@ -279,10 +279,23 @@ test('get text nodes divided by block', () => {
 test('gather text with text boundary from text nodes', () => {
   dom.innerHTML = `<b>A</b><b>B</b>`;
   const textNodes = getTextNodes(dom);
-  const { text, textBoundary } = getTextWithTextBoundaryFromTextNodes(
-    textNodes,
-  );
+  const { text, ranges } = getTextWithTextRanges(textNodes);
 
   expect(text).toBe('AB');
-  expect(textBoundary).toEqual([0, 1]);
+  expect(ranges).toEqual([
+    {
+      textNode: textNodes[0],
+      range: {
+        start: 0,
+        end: 1,
+      },
+    },
+    {
+      textNode: textNodes[1],
+      range: {
+        start: 1,
+        end: 2,
+      },
+    },
+  ]);
 });
