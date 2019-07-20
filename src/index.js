@@ -23,13 +23,11 @@ export default function findAndReplace(target, options = {}) {
 function withinHTML(html, options) {
   const element = document.createElement('div');
   element.innerHTML = html;
-
   withinElement(element, options);
   return element.innerHTML;
 }
 
 function withinElement(element, { flag, find, replace }) {
-  const isReplaceString = typeof replace === 'string';
   const textNodesDividedByBlock = getTextNodesDividedByBlock(element);
 
   // find and replace line by line
@@ -55,7 +53,9 @@ function withinElement(element, { flag, find, replace }) {
       const [foundText] = regexpExecResult;
       const endIndex = startIndex + foundText.length;
 
-      let copyOfReplace = isReplaceString && replace;
+      let copyOfReplaceText = typeof replace === 'string' && replace;
+      let copyOfFoundText = typeof replace === 'string' && foundText;
+      let slicedReplaceText = '';
       for (let i = 0; i < ranges.length; i++) {
         const {
           textNode,
@@ -116,6 +116,23 @@ function withinElement(element, { flag, find, replace }) {
         if (replacer) {
           const rangeStart = replacer.range.start - start;
           const rangeEnd = replacer.range.end - start;
+
+          if (typeof replace === 'string') {
+            slicedReplaceText = copyOfReplaceText.slice(
+              0,
+              rangeEnd - rangeStart,
+            );
+            copyOfReplaceText = copyOfReplaceText.slice(rangeEnd - rangeStart);
+            copyOfFoundText = copyOfFoundText.slice(rangeEnd - rangeStart);
+
+            // replace text is longer than found text.
+            // so put all replace text to last offset text of found text.
+            if (!copyOfFoundText && copyOfReplaceText.length > 0) {
+              slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
+              copyOfReplaceText = '';
+            }
+          }
+
           // add additional data and mutate
           Object.assign(replacer, {
             foundText,
@@ -123,16 +140,14 @@ function withinElement(element, { flag, find, replace }) {
               start: rangeStart,
               end: rangeEnd,
             },
-            replace,
+            replace:
+              typeof replace === 'string'
+                ? (slicedReplaceText => () =>
+                    document.createTextNode(slicedReplaceText))(
+                    slicedReplaceText,
+                  )
+                : replace,
           });
-
-          if (isReplaceString) {
-            replacer.replace = (slicedText => () =>
-              document.createTextNode(slicedText))(
-              copyOfReplace.slice(0, rangeEnd - rangeStart),
-            );
-            copyOfReplace = copyOfReplace.slice(rangeEnd - rangeStart);
-          }
 
           let unitOfReplace;
           if (weakMap.has(textNode)) {
