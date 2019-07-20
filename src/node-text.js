@@ -136,13 +136,22 @@ export function getTextNodesDividedByBlock(
   return textNodesDividedByBlock;
 }
 
-export function getTextWithTextBoundaryFromTextNodes(textNodes) {
+export function getTextWithTextRanges(textNodes) {
   return textNodes.reduce(
     (result, textNode) => {
-      result.textBoundary.push(result.text.length);
-      result.text = `${result.text}${textNode.nodeValue}`;
+      const { text } = result;
+      const { nodeValue } = textNode;
+
+      result.ranges.push({
+        textNode,
+        range: {
+          start: text.length,
+          end: text.length + nodeValue.length,
+        },
+      });
+      result.text = `${text}${textNode.nodeValue}`;
       return result;
     },
-    { text: '', textBoundary: [] },
+    { text: '', ranges: [] },
   );
 }

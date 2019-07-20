@@ -1,6 +1,12 @@
 import findAndReplace from './index';
 
 describe('find and replace', () => {
+  let root;
+
+  beforeEach(() => {
+    root = document.createElement('div');
+  });
+
   it('should accept HTML string', () => {
     expect(
       findAndReplace('<div>hel<i>l</i>o world</div>', {
@@ -11,147 +17,203 @@ describe('find and replace', () => {
   });
 
   it('should find text and replace it with text', () => {
-    const el = document.createElement('div');
-    el.appendChild(document.createTextNode('hello'));
-    el.appendChild(document.createTextNode(' '));
-    el.appendChild(document.createTextNode('world'));
-
-    findAndReplace(el, {
+    root.appendChild(document.createTextNode('hello'));
+    root.appendChild(document.createTextNode(' '));
+    root.appendChild(document.createTextNode('world'));
+    const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'HELLO',
     });
-    expect(el.innerHTML).toBe('HELLO world');
+    expect(root.innerHTML).toBe('HELLO world');
+    recover();
+    expect(root.innerHTML).toBe('hello world');
   });
 
   it('should find all text in node and replace it with text', () => {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode('h'));
-    div.appendChild(document.createTextNode('e'));
-    div.appendChild(document.createTextNode('l'));
-    div.appendChild(document.createTextNode('l'));
-    div.appendChild(document.createTextNode('o'));
+    let recover;
+    root.appendChild(document.createTextNode('hell'));
+    root.appendChild(document.createTextNode('o!h'));
+    root.appendChild(document.createTextNode('ello!'));
+    recover = findAndReplace(root, {
+      find: 'hello',
+      replace: 'hi',
+    });
+    expect(root.innerHTML).toBe('hi!hi!');
+    recover();
+    expect(root.innerHTML).toBe('hello!hello!');
 
-    findAndReplace(div, {
+    root = document.createElement('div');
+    root.appendChild(document.createTextNode('hello'));
+    recover = findAndReplace(root, {
       find: 'l',
       replace: 'L',
     });
-    expect(div.innerHTML).toBe('heLLo');
+    expect(root.innerHTML).toBe('heLLo');
+    recover();
+    expect(root.innerHTML).toBe('hello');
+
+    root = document.createElement('div');
+    root.appendChild(document.createTextNode('h'));
+    root.appendChild(document.createTextNode('e'));
+    root.appendChild(document.createTextNode('l'));
+    root.appendChild(document.createTextNode('l'));
+    root.appendChild(document.createTextNode('o'));
+    root.appendChild(document.createTextNode('!'));
+    root.appendChild(document.createTextNode('hello'));
+    root.appendChild(document.createTextNode('!'));
+    recover = findAndReplace(root, {
+      find: 'hello',
+      replace: 'hi',
+    });
+    expect(root.innerHTML).toBe('hi!hi!');
+    recover();
+    expect(root.innerHTML).toBe('hello!hello!');
+
+    root = document.createElement('div');
+    root.appendChild(document.createTextNode('h'));
+    root.appendChild(document.createTextNode('e'));
+    root.appendChild(document.createTextNode('l'));
+    root.appendChild(document.createTextNode('l'));
+    root.appendChild(document.createTextNode('o'));
+    recover = findAndReplace(root, {
+      find: 'l',
+      replace: 'L',
+    });
+    expect(root.innerHTML).toBe('heLLo');
+    recover();
+    expect(root.innerHTML).toBe('hello');
   });
 
   it('should find text and replace it with text when query text is shorter than replacing text', () => {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode('h'));
-    div.appendChild(document.createTextNode('e'));
-    div.appendChild(document.createTextNode('l'));
-    div.appendChild(document.createTextNode('l'));
-    div.appendChild(document.createTextNode('o'));
+    root.appendChild(document.createTextNode('h'));
+    root.appendChild(document.createTextNode('e'));
+    root.appendChild(document.createTextNode('l'));
+    root.appendChild(document.createTextNode('l'));
+    root.appendChild(document.createTextNode('o'));
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hello world',
     });
-    expect(div.innerHTML).toBe('hello world');
+    expect(root.innerHTML).toBe('hello world');
+    recover();
+    expect(root.innerHTML).toBe('hello');
   });
 
   it('should find text and replace it with text when query text is longer than replacing text', () => {
-    const div = document.createElement('div');
-    div.innerHTML = 'h<span></span>ello';
+    root.innerHTML = 'h<span></span>ello';
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
     });
-    expect(div.innerHTML).toBe('h<span></span>i');
+    expect(root.innerHTML).toBe('h<span></span>i');
+    recover();
+    expect(root.innerHTML).toBe('h<span></span>ello');
   });
 
   it('should find text in a single text node and replace it with text', () => {
-    const div = document.createElement('div');
-    div.innerHTML = 'hello hello hello';
+    root.innerHTML = 'hello hello hello';
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
     });
-    expect(div.innerHTML).toBe('hi hi hi');
+    expect(root.innerHTML).toBe('hi hi hi');
+    recover();
+    expect(root.innerHTML).toBe('hello hello hello');
   });
 
   it('should find text in a multiple tag and replace it with text', () => {
-    const div = document.createElement('div');
-    div.innerHTML = '<b>h</b><b>e</b><b>l</b><b>l</b><b>o</b>';
-
-    findAndReplace(div, {
+    root.innerHTML = '<b>h</b><b>e</b><b>l</b><b>l</b><b>o</b>';
+    const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
     });
-    expect(div.innerHTML).toBe('<b>h</b><b>i</b><b></b><b></b><b></b>');
+    expect(root.innerHTML).toBe('<b>h</b><b>i</b><b></b><b></b><b></b>');
+    recover();
+    expect(root.innerHTML).toBe('<b>h</b><b>e</b><b>l</b><b>l</b><b>o</b>');
   });
 
   it('should find text and replace it with regular expression', () => {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode('hello'));
-    div.appendChild(document.createTextNode(' '));
-    div.appendChild(document.createTextNode('world'));
+    root.appendChild(document.createTextNode('hello'));
+    root.appendChild(document.createTextNode(' '));
+    root.appendChild(document.createTextNode('world'));
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       find: '\\w+',
       replace: 'word',
     });
-    expect(div.innerHTML).toBe('word word');
+    expect(root.innerHTML).toBe('word word');
+    recover();
+    expect(root.innerHTML).toBe('hello world');
   });
 
   it('should find text and replace it with flag', () => {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode('hello'));
-    div.appendChild(document.createTextNode(' '));
-    div.appendChild(document.createTextNode('HELLO'));
+    root.appendChild(document.createTextNode('hello'));
+    root.appendChild(document.createTextNode(' '));
+    root.appendChild(document.createTextNode('HELLO'));
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       flag: 'gi',
       find: 'hello',
       replace: 'Hi',
     });
-    expect(div.innerHTML).toBe('Hi Hi');
+    expect(root.innerHTML).toBe('Hi Hi');
+    recover();
+    expect(root.innerHTML).toBe('hello HELLO');
   });
 
   it('should find text and replace it without flag', () => {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode('hello'));
-    div.appendChild(document.createTextNode(' '));
-    div.appendChild(document.createTextNode('HELLO'));
+    root.appendChild(document.createTextNode('hello'));
+    root.appendChild(document.createTextNode(' '));
+    root.appendChild(document.createTextNode('HELLO'));
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'Hi',
     });
-    expect(div.innerHTML).toBe('Hi HELLO');
+    expect(root.innerHTML).toBe('Hi HELLO');
+    recover();
+    expect(root.innerHTML).toBe('hello HELLO');
   });
 
   it('should find text and replace it with replacer', () => {
-    const div = document.createElement('div');
-    div.innerHTML = 'hello hello hello';
+    root.innerHTML = 'hello hello hello';
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       find: 'hello',
-      replace: ({ offsetText }) => `<b>${offsetText}</b>`,
+      replace: ({ offsetText }) => {
+        const bold = document.createElement('b');
+        bold.textContent = offsetText;
+        return bold;
+      },
     });
-    expect(div.innerHTML).toBe('<b>hello</b> <b>hello</b> <b>hello</b>');
+    expect(root.innerHTML).toBe('<b>hello</b> <b>hello</b> <b>hello</b>');
+    recover();
+    expect(root.innerHTML).toBe('hello hello hello');
   });
 
   it('should find link text and replace with linkify', () => {
-    const div = document.createElement('div');
-    div.innerHTML = `http://www.foo.com\nhttps://www.foo.com`;
+    root.innerHTML = `http://www.foo.com\nhttps://www.foo.com`;
 
-    findAndReplace(div, {
+    const recover = findAndReplace(root, {
       flag: 'gi',
       // @see https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url for url matching regular expression
       find:
         'https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
-      replace: ({ offsetText, regExpExecArray }) =>
-        `<a href="${regExpExecArray[0]}">${offsetText}</a>`,
+      replace: ({ offsetText, foundText }) => {
+        const anchor = document.createElement('a');
+        anchor.href = foundText;
+        anchor.textContent = offsetText;
+        return anchor;
+      },
     });
-
-    expect(div.innerHTML).toBe(
+    expect(root.innerHTML).toBe(
       `<a href="http://www.foo.com">http://www.foo.com</a>\n<a href="https://www.foo.com">https://www.foo.com</a>`,
     );
+
+    recover();
+    expect(root.innerHTML).toBe(`http://www.foo.com\nhttps://www.foo.com`);
   });
 });
