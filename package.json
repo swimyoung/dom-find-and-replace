@@ -31,7 +31,6 @@
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
-    "babel-plugin-lodash": "^3.3.4",
     "chance": "^1.0.18",
     "clean-webpack-plugin": "^3.0.0",
     "codecov": "^3.5.0",
@@ -54,8 +53,7 @@
     "webpack-dev-server": "^3.7.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.4.5",
-    "lodash": "^4.17.11"
+    "@babel/runtime": "^7.4.5"
   },
   "prettier": {
     "singleQuote": true,

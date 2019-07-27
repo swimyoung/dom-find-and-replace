@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 const { ELEMENT_NODE, TEXT_NODE, COMMENT_NODE } = Node;
 
 const arrayToTagNameMap = arr =>
@@ -203,9 +201,7 @@ export const InlineNodes = {
 };
 
 const isNode = arg =>
-  _.isObjectLike(arg) &&
-  _.isPlainObject(arg) === false &&
-  typeof arg.nodeType !== 'undefined';
+  typeof arg === 'object' && typeof arg.nodeType !== 'undefined';
 
 export const isElementNode = arg =>
   isNode(arg) && arg.nodeType === ELEMENT_NODE;

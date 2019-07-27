@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { isElementNode } from './node-type';
 import { getTextNodesDividedByBlock, getTextWithTextRanges } from './node-text';
 
@@ -13,7 +12,7 @@ export default function findAndReplace(target, options = {}) {
 
   if (isElementNode(target)) {
     return withinElement(target, optionsWithDefault);
-  } else if (_.isString(target)) {
+  } else if (typeof target === 'string') {
     return withinHTML(target, optionsWithDefault);
   } else {
     return null;
