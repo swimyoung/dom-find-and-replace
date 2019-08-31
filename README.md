@@ -17,8 +17,8 @@ npm install dom-find-and-replace
 ```js
 import domFindAndReplace from 'dom-find-and-replace';
 
-// return: function that undo replacement
-const undo = domFindAndReplace(
+// return: function that recover replacement
+const recover = domFindAndReplace(
   document.getElementById('container'), 
   {
     find: 'hello',
@@ -50,7 +50,7 @@ const html = domFindAndReplace(
 
 #### Return
 
-- `() => void` | `string`: it returns html string when target is html string otherwise function that you can undo replacement
+- `() => void` | `string`: it returns html string when target is html string otherwise function that you can recover replacement
 
 #### Examples
 
@@ -58,13 +58,13 @@ const html = domFindAndReplace(
 import domFindAndReplace from 'dom-find-and-replace';
 
 // find 'hello' in id 'container' element and replace it with 'hi'
-const undo = domFindAndReplace(document.getElementById('container'), {
+const recover = domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
   replace: 'hi',
 });
 
 // find 'hello' in id 'container' element and wrap with bold element
-const undo = domFindAndReplace(document.getElementById('container'), {
+const recover = domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
 
   /**
@@ -81,7 +81,7 @@ const undo = domFindAndReplace(document.getElementById('container'), {
 });
 
 // find link in id 'root' element and make an anchor element
-const undo = domFindAndReplace(document.getElementById('root'), {
+const recover = domFindAndReplace(document.getElementById('root'), {
   flag: 'gi',
 
   // @see https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url for url matching regular expression
