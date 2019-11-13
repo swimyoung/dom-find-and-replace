@@ -60,9 +60,7 @@ const gatherTextNodes = (store, nodes, nodesByBlockMap, blockCompareFunction) =>
 
 export function getTextNodesDividedByBlock(
   root,
-  blockCompareFunction = node => {
-    return isElementNode(node) && (isBlockNode(node) || node.tagName === 'A');
-  },
+  blockCompareFunction = node => isElementNode(node) && isBlockNode(node),
 ) {
   const progressStack = [];
   const pendStack = [];
