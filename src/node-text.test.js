@@ -162,9 +162,7 @@ test('get text nodes divided by block', () => {
 
   /*
     [
-      [A],
-      [B],
-      [C]
+      [A, B, C]
     ]
   */
   dom.innerHTML = removeTagSpaceInHTML(`
@@ -173,15 +171,12 @@ test('get text nodes divided by block', () => {
     C
   `);
   expect(getTextNodesDividedByBlock(dom)).toEqual([
-    [dom.firstChild],
-    [dom.childNodes[1].firstChild],
-    [dom.lastChild],
+    [dom.firstChild, dom.childNodes[1].firstChild, dom.lastChild],
   ]);
 
   /*
     [
-      [A],
-      [B, C]
+      [A, B, C]
     ]
   */
   dom.innerHTML = removeTagSpaceInHTML(`
@@ -193,8 +188,7 @@ test('get text nodes divided by block', () => {
     <span>C</span>
   `);
   expect(getTextNodesDividedByBlock(dom)).toEqual([
-    [dom.firstChild.firstChild],
-    [dom.childNodes[1], dom.lastChild.firstChild],
+    [dom.firstChild.firstChild, dom.childNodes[1], dom.lastChild.firstChild],
   ]);
 
   /*
