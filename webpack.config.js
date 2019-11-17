@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    'dist/domFindAndReplace': `${__dirname}/src/index.js`,
+    'dist/domFindAndReplace': `${__dirname}/src/index.ts`,
   },
   output: {
     path: __dirname,
@@ -10,12 +10,15 @@ module.exports = {
     libraryTarget: 'umd',
   },
   mode: 'production',
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.ts$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: 'ts-loader',
       },
     ],
   },

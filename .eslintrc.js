@@ -1,25 +1,15 @@
 module.exports = {
-  env: {
-    es6: true,
-    browser: false,
-    node: true,
-  },
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
+  ],
   parserOptions: {
-    ecmaVersion: 2019,
+    ecmaVersion: 2018,
     sourceType: 'module',
   },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   rules: {
-    'no-console': 'off'
+    //
   },
-  overrides: [
-    {
-      files: ['**/*.test.js'],
-      env: { jest: true },
-    },
-    {
-      files: ['**/src/**/*.js'],
-      env: { browser: true, node: false },
-    },
-  ],
 };

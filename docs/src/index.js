@@ -36,7 +36,7 @@ ${Array.from({ length: 1 }).reduce(
   html =>
     html +
     `<p>${Array.from({ length: 15 }).reduce(html => {
-      let randomChanceContent = generateRandomChance().split('');
+      const randomChanceContent = generateRandomChance().split('');
       while (randomChanceContent.length > 10) {
         const offset = chance.integer({
           min: 0,

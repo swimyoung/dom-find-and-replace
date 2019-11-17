@@ -24,25 +24,9 @@ module.exports = {
         use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
       {
-        test: /\.js/,
+        test: /\.ts$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            extends: `${__dirname}/../babel.config.js`,
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  modules: false,
-                  targets: {
-                    browsers: ['last 2 versions'],
-                  },
-                },
-              ],
-            ],
-          },
-        },
+        loader: 'ts-loader',
       },
     ],
   },
