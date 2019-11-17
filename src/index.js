@@ -1,5 +1,5 @@
 import { isElementNode } from './node-type';
-import { getTextNodesDividedByBlock, getTextWithTextRanges } from './node-text';
+import { getTextNodesDividedByBlock, getTextWithRanges } from './node-text';
 
 export default function findAndReplace(target, options = {}) {
   const optionsWithDefault = Object.assign(
@@ -31,7 +31,7 @@ function withinElement(element, { flag, find, replace }) {
 
   // find and replace line by line
   const recovers = textNodesDividedByBlock.map(textNodes => {
-    const { text: oneLineOfTexts, ranges } = getTextWithTextRanges(textNodes);
+    const { text: oneLineOfTexts, ranges } = getTextWithRanges(textNodes);
     const regex = new RegExp(find, flag);
     const weakMap = new WeakMap();
     let head;

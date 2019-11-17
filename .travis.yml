@@ -4,7 +4,7 @@ node_js:
 
 script:
 - npm run lint
-- npm run test:coverage
+- npm run test -- --coverage
 - npm run dist
 
 after_success:
