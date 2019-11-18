@@ -1,7 +1,7 @@
-import findAndReplace from './index';
+import findAndReplace, { Recover } from './index';
 
 describe('find and replace', () => {
-  let root;
+  let root: Element;
 
   beforeEach(() => {
     root = document.createElement('div');
@@ -23,7 +23,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'HELLO',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('HELLO world');
     recover();
     expect(root.innerHTML).toBe('hello world');
@@ -37,7 +37,7 @@ describe('find and replace', () => {
     recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('hi!hi!');
     recover();
     expect(root.innerHTML).toBe('hello!hello!');
@@ -47,7 +47,7 @@ describe('find and replace', () => {
     recover = findAndReplace(root, {
       find: 'l',
       replace: 'L',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('heLLo');
     recover();
     expect(root.innerHTML).toBe('hello');
@@ -64,7 +64,7 @@ describe('find and replace', () => {
     recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('hi!hi!');
     recover();
     expect(root.innerHTML).toBe('hello!hello!');
@@ -78,7 +78,7 @@ describe('find and replace', () => {
     recover = findAndReplace(root, {
       find: 'l',
       replace: 'L',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('heLLo');
     recover();
     expect(root.innerHTML).toBe('hello');
@@ -94,7 +94,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hello world',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('hello world');
     recover();
     expect(root.innerHTML).toBe('hello');
@@ -106,7 +106,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('h<span></span>i');
     recover();
     expect(root.innerHTML).toBe('h<span></span>ello');
@@ -118,7 +118,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('hi hi hi');
     recover();
     expect(root.innerHTML).toBe('hello hello hello');
@@ -129,7 +129,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('<b>h</b><b>i</b><b></b><b></b><b></b>');
     recover();
     expect(root.innerHTML).toBe('<b>h</b><b>e</b><b>l</b><b>l</b><b>o</b>');
@@ -143,7 +143,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: '\\w+',
       replace: 'word',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('word word');
     recover();
     expect(root.innerHTML).toBe('hello world');
@@ -158,7 +158,7 @@ describe('find and replace', () => {
       flag: 'gi',
       find: 'hello',
       replace: 'Hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('Hi Hi');
     recover();
     expect(root.innerHTML).toBe('hello HELLO');
@@ -172,7 +172,7 @@ describe('find and replace', () => {
     const recover = findAndReplace(root, {
       find: 'hello',
       replace: 'Hi',
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('Hi HELLO');
     recover();
     expect(root.innerHTML).toBe('hello HELLO');
@@ -188,7 +188,7 @@ describe('find and replace', () => {
         bold.textContent = offsetText;
         return bold;
       },
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe('<b>hello</b> <b>hello</b> <b>hello</b>');
     recover();
     expect(root.innerHTML).toBe('hello hello hello');
@@ -208,7 +208,7 @@ describe('find and replace', () => {
         anchor.textContent = offsetText;
         return anchor;
       },
-    });
+    }) as Recover;
     expect(root.innerHTML).toBe(
       `<a href="http://www.foo.com">http://www.foo.com</a>\n<a href="https://www.foo.com">https://www.foo.com</a>`,
     );

@@ -317,24 +317,26 @@ cases(
   'gather text with text boundary from text nodes',
   (opts: any) => {
     root.innerHTML = opts.name;
-    const nodes = getTextNodes(root);
-    expect(getTextWithRanges(nodes)).toEqual(opts.expecting(nodes));
+    const textNodes = getTextNodes(root);
+    expect(getTextWithRanges(textNodes)).toEqual(opts.expecting(textNodes));
   },
   [
     {
       name: `<b>A</b><b>B</b>`,
-      expecting: (nodes: Text[]): { text: string; ranges: TextRanges[] } => ({
+      expecting: (
+        textNodes: Text[],
+      ): { text: string; ranges: TextRanges[] } => ({
         text: 'AB',
         ranges: [
           {
-            node: nodes[0],
+            textNode: textNodes[0],
             range: {
               start: 0,
               end: 1,
             },
           },
           {
-            node: nodes[1],
+            textNode: textNodes[1],
             range: {
               start: 1,
               end: 2,
