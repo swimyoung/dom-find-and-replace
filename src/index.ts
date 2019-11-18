@@ -1,32 +1,22 @@
 import { isElementNode } from './node-type';
 import { getTextNodesDividedByBlock, getTextWithRanges } from './node-text';
+import Replacer, { ReplaceFunction } from './Replacer';
+import UnitOfReplace from './UnitOfReplace';
 
-export default function findAndReplace(target, options = {}) {
-  const optionsWithDefault = Object.assign(
-    {},
-    {
-      flag: 'g',
-    },
-    options,
-  );
-
-  if (isElementNode(target)) {
-    return withinElement(target, optionsWithDefault);
-  } else if (typeof target === 'string') {
-    return withinHTML(target, optionsWithDefault);
-  } else {
-    return null;
-  }
+interface Options {
+  flag?: string;
+  find: string;
+  replace: string | ReplaceFunction;
 }
 
-function withinHTML(html, options) {
-  const element = document.createElement('div');
-  element.innerHTML = html;
-  withinElement(element, options);
-  return element.innerHTML;
+interface Recover {
+  (): void;
 }
 
-function withinElement(element, { flag, find, replace }) {
+function withinElement(
+  element: Element,
+  { flag, find, replace }: Options,
+): Recover {
   const textNodesDividedByBlock = getTextNodesDividedByBlock(element);
 
   // find and replace line by line
@@ -34,12 +24,12 @@ function withinElement(element, { flag, find, replace }) {
     const { text: oneLineOfTexts, ranges } = getTextWithRanges(textNodes);
     const regex = new RegExp(find, flag);
     const weakMap = new WeakMap();
-    let head;
-    let tail;
+    let head: UnitOfReplace;
+    let tail: UnitOfReplace;
 
     let regexpExecResult = regex.exec(oneLineOfTexts);
     if (!regexpExecResult) {
-      return () => {};
+      return (): void => {};
     }
 
     // find
@@ -48,6 +38,7 @@ function withinElement(element, { flag, find, replace }) {
       if (!regexpExecResult[0]) {
         break;
       }
+
       const { index: startIndex } = regexpExecResult;
       const [foundText] = regexpExecResult;
       const endIndex = startIndex + foundText.length;
@@ -61,60 +52,51 @@ function withinElement(element, { flag, find, replace }) {
           range: { start, end },
         } = ranges[i];
 
-        let replacer;
+        const replacer: Replacer = new Replacer(foundText);
         if (
           // startIndex <= start < endIndex
           start >= startIndex &&
           start < endIndex
         ) {
-          replacer = {
-            range: {
-              start,
-              end: end < endIndex ? end : endIndex,
-            },
-          };
+          replacer.setRange({ start, end: end < endIndex ? end : endIndex });
         } else if (
           // startIndex < end <= endIndex
           end > startIndex &&
           end <= endIndex
         ) {
-          replacer = {
-            range: {
-              start: start < startIndex ? startIndex : start,
-              end: end,
-            },
-          };
+          replacer.setRange({
+            start: start < startIndex ? startIndex : start,
+            end: end,
+          });
         } else if (
           // start <= startIndex < end
           startIndex >= start &&
           startIndex < end
         ) {
-          replacer = {
-            range: {
-              start: startIndex,
-              end: end < endIndex ? end : endIndex,
-            },
-          };
+          replacer.setRange({
+            start: startIndex,
+            end: end < endIndex ? end : endIndex,
+          });
         } else if (
           // start < endIndex <= end
           endIndex > start &&
           endIndex <= end
         ) {
-          replacer = {
-            range: {
-              start: start < startIndex ? startIndex : start,
-              end: endIndex,
-            },
-          };
+          replacer.setRange({
+            start: start < startIndex ? startIndex : start,
+            end: endIndex,
+          });
         } else if (start === startIndex && end === endIndex) {
-          replacer = {
-            range: { start, end },
-          };
+          replacer.setRange({ start, end });
         }
 
-        if (replacer) {
+        if (replacer.range) {
           const rangeStart = replacer.range.start - start;
           const rangeEnd = replacer.range.end - start;
+          replacer.setRange({
+            start: rangeStart,
+            end: rangeEnd,
+          });
 
           if (typeof replace === 'string') {
             slicedReplaceText = copyOfReplaceText.slice(
@@ -130,33 +112,19 @@ function withinElement(element, { flag, find, replace }) {
               slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
               copyOfReplaceText = '';
             }
+            replacer.setReplace(
+              (slicedReplaceText => () =>
+                document.createTextNode(slicedReplaceText))(slicedReplaceText),
+            );
+          } else {
+            replacer.setReplace(replace);
           }
 
-          // add additional data and mutate
-          Object.assign(replacer, {
-            foundText,
-            range: {
-              start: rangeStart,
-              end: rangeEnd,
-            },
-            replace:
-              typeof replace === 'string'
-                ? (slicedReplaceText => () =>
-                    document.createTextNode(slicedReplaceText))(
-                    slicedReplaceText,
-                  )
-                : replace,
-          });
-
-          let unitOfReplace;
+          let unitOfReplace: UnitOfReplace;
           if (weakMap.has(textNode)) {
             unitOfReplace = weakMap.get(textNode);
           } else {
-            unitOfReplace = {
-              replacedNodes: [],
-              textNode,
-              replacers: [],
-            };
+            unitOfReplace = new UnitOfReplace(textNode);
             weakMap.set(textNode, unitOfReplace);
 
             if (!head) {
@@ -178,17 +146,17 @@ function withinElement(element, { flag, find, replace }) {
     }
 
     // replace
-    let unitOfReplace = head;
+    let unitOfReplace: UnitOfReplace = head;
     while (unitOfReplace) {
       const { replacers, textNode } = unitOfReplace;
-      const { nodeValue: text } = textNode;
-      const arr = [];
+      const arr: Replacer[] = [];
 
       // order text node based on range
-      arr.push({
-        range: { start: 0, end: replacers[0].range.start },
-        replace: ({ offsetText }) => document.createTextNode(offsetText),
-      });
+      arr.push(
+        new Replacer('')
+          .setRange({ start: 0, end: replacers[0].range.start })
+          .setReplace(({ offsetText }) => document.createTextNode(offsetText)),
+      );
       let previousReplacer;
       for (let i = 0; i < replacers.length; i++) {
         const replacer = replacers[i];
@@ -196,29 +164,33 @@ function withinElement(element, { flag, find, replace }) {
           previousReplacer &&
           previousReplacer.range.end !== replacer.range.start
         ) {
-          arr.push({
-            range: {
-              start: previousReplacer.range.end,
-              end: replacer.range.start,
-            },
-            replace: ({ offsetText }) => document.createTextNode(offsetText),
-          });
+          arr.push(
+            new Replacer('')
+              .setRange({
+                start: previousReplacer.range.end,
+                end: replacer.range.start,
+              })
+              .setReplace(({ offsetText }) =>
+                document.createTextNode(offsetText),
+              ),
+          );
         }
         arr.push(replacer);
         previousReplacer = replacer;
       }
-      arr.push({
-        range: {
-          start: replacers[replacers.length - 1].range.end,
-          end: text.length,
-        },
-        replace: ({ offsetText }) => document.createTextNode(offsetText),
-      });
+      arr.push(
+        new Replacer('')
+          .setRange({
+            start: replacers[replacers.length - 1].range.end,
+            end: textNode.nodeValue.length,
+          })
+          .setReplace(({ offsetText }) => document.createTextNode(offsetText)),
+      );
 
       // split text node
       const nodes = arr.reduce(
         (nodes, { range: { start, end }, replace, foundText }) => {
-          const offsetText = text.slice(start, end);
+          const offsetText = textNode.nodeValue.slice(start, end);
           // when start and end are the same
           if (!offsetText) {
             return nodes;
@@ -230,7 +202,7 @@ function withinElement(element, { flag, find, replace }) {
         },
         [],
       );
-      unitOfReplace.replacedNodes = nodes;
+      unitOfReplace.setReplacedNodes(nodes);
       textNode.parentNode.replaceChild(
         nodes.reduce((fragment, node) => {
           fragment.appendChild(node);
@@ -275,5 +247,35 @@ function withinElement(element, { flag, find, replace }) {
   });
 
   // recover
-  return () => recovers.forEach(recover => recover());
+  return (): void => recovers.forEach(recover => recover());
 }
+
+function withinHTML(html: string, options: Options): string {
+  const element = document.createElement('div');
+  element.innerHTML = html;
+  withinElement(element, options);
+  return element.innerHTML;
+}
+
+export default function findAndReplace(
+  target: Element | string,
+  options: Options,
+): Recover | string {
+  const optionsWithDefault = Object.assign(
+    {},
+    {
+      flag: 'g',
+    },
+    options,
+  );
+
+  if (isElementNode(target as Node)) {
+    return withinElement(target as Element, optionsWithDefault);
+  } else if (typeof target === 'string') {
+    return withinHTML(target, optionsWithDefault);
+  }
+
+  return null;
+}
+
+export { Recover };

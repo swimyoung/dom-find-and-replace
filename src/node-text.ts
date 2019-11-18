@@ -6,7 +6,7 @@ import {
 } from './node-type';
 
 export interface TextRanges {
-  node: Text;
+  textNode: Text;
   range: { start: number; end: number };
 }
 
@@ -114,16 +114,16 @@ function getTextNodesDividedByBlock(root: Element): Text[][] {
 }
 
 function getTextWithRanges(
-  nodes: Text[],
+  textNodes: Text[],
 ): { text: string; ranges: TextRanges[] } {
   const ranges: TextRanges[] = [];
   let text = '';
 
-  for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const { nodeValue } = node;
+  for (let i = 0; i < textNodes.length; i++) {
+    const textNode = textNodes[i];
+    const { nodeValue } = textNode;
     ranges.push({
-      node,
+      textNode,
       range: {
         start: text.length,
         end: text.length + nodeValue.length,
