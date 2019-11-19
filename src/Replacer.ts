@@ -39,7 +39,7 @@ class Replacer implements SinglyLinkedListNode {
 
   replace() {
     const last = this.replacements[this.replacements.length - 1];
-    let additionalReplacements = [];
+    const additionalReplacements = [];
     if (last.range.end < this.textNode.nodeValue.length) {
       const rear = new Replacement(this.textNode.nodeValue);
       rear.range = {

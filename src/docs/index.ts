@@ -1,6 +1,9 @@
+import 'normalize.css';
+import './index.css';
+
 import Chance from 'chance';
 import randomColor from 'randomcolor';
-import findAndReplace from '../../src/index';
+import findAndReplace, { Recover } from '../index';
 
 const chance = new Chance();
 
@@ -55,19 +58,19 @@ ${Array.from({ length: 1 }).reduce(
 (async () => {
   await new Promise(resolve => window.addEventListener('load', resolve));
 
-  const [elQuery] = document.getElementsByClassName('query');
-  const [elContent] = document.getElementsByClassName('content');
-  let recover;
+  const elQuery = document.getElementsByClassName('query')[0];
+  const elContent = document.getElementsByClassName('content')[0];
+  let recover: Recover;
 
   elContent.innerHTML = initialContent;
-  elQuery.addEventListener('keyup', ({ target: { value } }) => {
-    let previousFoundText;
+  elQuery.addEventListener('keyup', event => {
+    let previousFoundText: string;
     let color = randomColor();
 
     recover && recover();
     recover = findAndReplace(elContent, {
-      find: value,
-      replace: ({ offsetText, foundText }) => {
+      find: (<HTMLInputElement>event.target).value,
+      replace: (offsetText, foundText) => {
         color = previousFoundText !== foundText ? randomColor() : color;
         previousFoundText = foundText;
 
@@ -76,6 +79,6 @@ ${Array.from({ length: 1 }).reduce(
         span.setAttribute('style', 'background-color: ' + color + ';');
         return span;
       },
-    });
+    }) as Recover;
   });
 })();

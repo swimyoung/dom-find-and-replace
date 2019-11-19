@@ -1,5 +1,5 @@
 dist
+docs
 coverage
 .vscode
 node_modules
-bundles

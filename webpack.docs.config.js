@@ -6,16 +6,13 @@ const production = process.env.NODE_ENV === 'production';
 const hash = production ? 'contenthash' : 'hash';
 
 module.exports = {
-  entry: [
-    'normalize.css',
-    `${__dirname}/src/index.css`,
-    `${__dirname}/src/index.js`,
-  ],
+  entry: `${__dirname}/src/docs/index.ts`,
   output: {
-    path: `${__dirname}/bundles`,
+    path: `${__dirname}/docs`,
     filename: `[name].[${hash}].js`,
-    chunkFilename: `[name].[${hash}].js`,
-    hashDigestLength: 5,
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
   },
   module: {
     rules: [
@@ -30,15 +27,13 @@ module.exports = {
       },
     ],
   },
-  optimization: { splitChunks: { chunks: 'all' } },
   plugins: [
     ...(production ? [new CleanWebpackPlugin()] : []),
     new MiniCssExtractPlugin({
       filename: `[name].[${hash}].css`,
     }),
     new HTMLWebpackPlugin({
-      template: `${__dirname}/src/index.html`,
-      filename: `${production ? '../' : ''}index.html`,
+      template: `${__dirname}/src/docs/index.html`,
     }),
   ],
   mode: production ? 'production' : 'development',
