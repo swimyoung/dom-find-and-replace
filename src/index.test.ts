@@ -183,7 +183,7 @@ describe('find and replace', () => {
 
     const recover = findAndReplace(root, {
       find: 'hello',
-      replace: ({ offsetText }) => {
+      replace: offsetText => {
         const bold = document.createElement('b');
         bold.textContent = offsetText;
         return bold;
@@ -202,7 +202,7 @@ describe('find and replace', () => {
       // @see https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url for url matching regular expression
       find:
         'https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
-      replace: ({ offsetText, foundText }) => {
+      replace: (offsetText, foundText) => {
         const anchor = document.createElement('a');
         anchor.href = foundText;
         anchor.textContent = offsetText;
