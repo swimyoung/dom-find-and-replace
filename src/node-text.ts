@@ -4,10 +4,11 @@ import {
   isTextNode,
   isBlockNode,
 } from './node-type';
+import { Range } from './Range';
 
-export interface TextRanges {
+export interface TextNodeWithRange {
   textNode: Text;
-  range: { start: number; end: number };
+  range: Range;
 }
 
 function getTextNodes(node: Node): Text[] {
@@ -115,8 +116,8 @@ function getTextNodesDividedByBlock(root: Element): Text[][] {
 
 function getTextWithRanges(
   textNodes: Text[],
-): { text: string; ranges: TextRanges[] } {
-  const ranges: TextRanges[] = [];
+): { text: string; ranges: TextNodeWithRange[] } {
+  const ranges: TextNodeWithRange[] = [];
   let text = '';
 
   for (let i = 0; i < textNodes.length; i++) {

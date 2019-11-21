@@ -3,7 +3,7 @@ import {
   getTextNodes,
   getTextNodesDividedByBlock,
   getTextWithRanges,
-  TextRanges,
+  TextNodeWithRange,
 } from './node-text';
 
 const removeTagSpaceInHTML = (html: string): string =>
@@ -325,7 +325,7 @@ cases(
       name: `<b>A</b><b>B</b>`,
       expecting: (
         textNodes: Text[],
-      ): { text: string; ranges: TextRanges[] } => ({
+      ): { text: string; ranges: TextNodeWithRange[] } => ({
         text: 'AB',
         ranges: [
           {

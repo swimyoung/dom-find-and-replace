@@ -1,7 +1,4 @@
-interface Range {
-  start: number;
-  end: number;
-}
+import { Range } from './Range';
 
 interface ReplaceFunction {
   (offsetText: string, foundText: string): Node;
