@@ -46,7 +46,7 @@ const html = domFindAndReplace(
 - params (`object`)
   - flag (`string`): a regular expression flag
   - find (`string`): a regular expression string
-  - replace (`string` | `({ offsetText, foundText }) => Node`)
+  - replace (`string` | `(offsetText, foundText) => Node`)
 
 #### Return
 
@@ -68,12 +68,11 @@ const recover = domFindAndReplace(document.getElementById('container'), {
   find: 'hello',
 
   /**
-   * @param {object} param
-   * @param {string} param.offsetText a part of matched text or whole part
-   * @param {string} param.foundText a matched text
+   * @param {string} offsetText a part of matched text or whole part
+   * @param {string} foundText a matched text
    * @return {Node} it replaces a matched text node with a given node
    */
-  replace: ({ offsetText, foundText }) => {
+  replace: (offsetText, foundText) => {
     const bold = document.createElement('bold');
     bold.textContent = offsetText;
     return bold;
@@ -88,7 +87,7 @@ const recover = domFindAndReplace(document.getElementById('root'), {
   find:
     'https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)',
 
-  replace: ({ offsetText, foundText }) => {
+  replace: (offsetText, foundText) => {
     const anchor = document.createElement('a');
     anchor.textContent = offsetText;
     anchor.setAttribute('href', foundText);
