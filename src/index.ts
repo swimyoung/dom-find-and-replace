@@ -179,13 +179,13 @@ export default function findAndReplace(
     options,
   );
 
-  if (isElementNode(target as Node)) {
-    return withinElement(target as Element, optionsWithDefault);
-  } else if (typeof target === 'string') {
+  if (typeof target === 'string') {
     return withinHTML(target, optionsWithDefault);
+  } else if (isElementNode(target as Node)) {
+    return withinElement(target as Element, optionsWithDefault);
+  } else {
+    return null;
   }
-
-  return null;
 }
 
 export { Recover };
