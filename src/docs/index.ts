@@ -46,9 +46,15 @@ ${Array.from({ length: 1 }).reduce(
           max: (randomChanceContent.length - 1) / 2,
         });
         const fontSize = chance.integer({ min: 7, max: 30 });
-        html += `<span style="font-size: ${fontSize}px;">${randomChanceContent
+        const withAnchor = chance.integer({ min: 0, max: 10 }) === 1;
+        let content = `<span style="font-size: ${fontSize}px;">${randomChanceContent
           .splice(0, offset)
           .join('')}</span>`;
+        if (withAnchor) {
+          content = `<a href="#">${content}</a>`;
+        }
+
+        html += content;
       }
       return html + randomChanceContent.join('');
     }, '')}</p>`,
@@ -63,7 +69,7 @@ ${Array.from({ length: 1 }).reduce(
   let recover: Recover;
 
   elContent.innerHTML = initialContent;
-  elQuery.addEventListener('keyup', event => {
+  elQuery.addEventListener('input', event => {
     let previousFoundText: string;
     let color = randomColor();
 
