@@ -1,60 +1,48 @@
 {
-  "name": "dom-find-and-replace",
-  "version": "1.3.0",
-  "description": "Find some text in the dom and replace with what you want",
-  "main": "dist/index.js",
-  "author": "Youngjin Jang",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/swimyoung/dom-find-and-replace"
-  },
-  "license": "MIT",
+  "name": "dom-find-and-replace-gh-pages",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "npm run dev",
-    "test": "jest",
-    "report": "codecov",
-    "format": "prettier --write \"**/*.ts\"",
-    "lint": "eslint --ext \".js,.ts\" .",
-    "dev": "webpack-dev-server --config webpack.docs.config.js",
-    "docs": "cross-env NODE_ENV=production webpack -p --config webpack.docs.config.js",
-    "transpile": "tsc",
-    "bundle": "webpack -p",
-    "dist": "rimraf dist && run-p transpile bundle docs"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "chance": "^1.1.3",
+    "core-js": "^3.3.2",
+    "dom-find-and-replace": "^1.3.0",
+    "randomcolor": "^0.5.4",
+    "vue": "^2.6.10"
   },
   "devDependencies": {
     "@types/chance": "^1.0.7",
-    "@types/jest": "^24.0.23",
-    "@types/jest-in-case": "^1.0.1",
-    "@types/lodash": "^4.14.147",
-    "@types/node": "^12.12.7",
     "@types/randomcolor": "^0.5.3",
-    "@typescript-eslint/eslint-plugin": "^2.7.0",
-    "@typescript-eslint/parser": "^2.7.0",
-    "chance": "^1.1.3",
-    "clean-webpack-plugin": "^3.0.0",
-    "codecov": "^3.6.1",
-    "cross-env": "6.0.3",
-    "css-loader": "^3.2.0",
-    "eslint": "^6.6.0",
-    "eslint-config-prettier": "^6.5.0",
+    "@types/jest": "^24.0.11",
+    "@vue/cli-plugin-babel": "^4.0.0",
+    "@vue/cli-plugin-eslint": "^4.0.0",
+    "@vue/cli-plugin-typescript": "^4.0.0",
+    "@vue/cli-plugin-unit-jest": "^4.0.0",
+    "@vue/cli-plugin-vuex": "^4.0.0",
+    "@vue/cli-service": "^4.0.0",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "@vue/eslint-config-typescript": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.1",
-    "html-webpack-plugin": "^3.2.0",
-    "husky": "^3.1.0",
-    "jest": "^24.9.0",
-    "jest-in-case": "^1.0.2",
-    "lint-staged": "^9.4.3",
-    "mini-css-extract-plugin": "0.8.0",
-    "normalize.css": "^8.0.1",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^1.19.1",
-    "randomcolor": "^0.5.4",
-    "rimraf": "^2.7.1",
-    "ts-jest": "^24.1.0",
-    "ts-loader": "^6.2.1",
-    "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "eslint-plugin-vue": "^5.0.0",
+    "lint-staged": "^9.4.2",
+    "prettier": "^1.18.2",
+    "typescript": "~3.5.3",
+    "vue-template-compiler": "^2.6.10"
   },
-  "dependencies": {}
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,vue,ts}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
 }
