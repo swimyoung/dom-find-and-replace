@@ -1,23 +1,15 @@
 interface SinglyLinkedListNode {
-  next: SinglyLinkedListNode;
+  next: SinglyLinkedListNode | null;
 }
 
 class SinglyLinkedList<T extends SinglyLinkedListNode> {
-  head: T;
-  tail: T;
+  head: T | null = null;
+  tail: T | null = null;
 
-  constructor() {
-    this.head = null;
-    this.tail = null;
-  }
-
-  add(node: T) {
+  add(node: T): void {
     if (!this.head) {
       this.head = this.tail = node;
-    } else if (
-      // avoid circular link
-      this.head !== node
-    ) {
+    } else if (this.head !== node && this.tail) {
       this.tail.next = node;
       this.tail = node;
     }

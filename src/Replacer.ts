@@ -2,28 +2,26 @@ import { Replacement } from './Replacement';
 import { SinglyLinkedListNode } from './SinglyLinkedList';
 
 class Replacer implements SinglyLinkedListNode {
-  next: Replacer;
-
+  next: Replacer | null = null;
   private textNode: Text;
-  private replacements: Replacement[];
-  private replacedNodes: Node[];
+  private replacements: Replacement[] = [];
+  private replacedNodes: Node[] = [];
 
   constructor(textNode: Text) {
     this.textNode = textNode;
-    this.replacements = [];
   }
 
-  addReplacement(replacement: Replacement) {
+  addReplacement(replacement: Replacement): void {
     if (this.replacements.length === 0) {
       if (replacement.range.start > 0) {
-        const front = new Replacement(this.textNode.nodeValue);
+        const front = new Replacement(this.textNode.nodeValue as string);
         front.range = { start: 0, end: replacement.range.start };
         this.replacements.push(front);
       }
     } else {
       const last = this.replacements[this.replacements.length - 1];
       if (replacement.range.start - last.range.end > 0) {
-        const middle = new Replacement(this.textNode.nodeValue);
+        const middle = new Replacement(this.textNode.nodeValue as string);
         middle.range = {
           start: last.range.end,
           end: replacement.range.start,
@@ -37,21 +35,22 @@ class Replacer implements SinglyLinkedListNode {
     this.replacements.push(replacement);
   }
 
-  replace() {
+  replace(): void {
     const last = this.replacements[this.replacements.length - 1];
     const additionalReplacements = [];
-    if (last.range.end < this.textNode.nodeValue.length) {
-      const rear = new Replacement(this.textNode.nodeValue);
+
+    if (last.range.end < (this.textNode.nodeValue as string).length) {
+      const rear = new Replacement(this.textNode.nodeValue as string);
       rear.range = {
         start: last.range.end,
-        end: this.textNode.nodeValue.length,
+        end: (this.textNode.nodeValue as string).length,
       };
       additionalReplacements.push(rear);
     }
 
     const replacedNodes = this.replacements
       .concat(additionalReplacements)
-      .reduce((nodes, replacement) => {
+      .reduce((nodes: Node[], replacement) => {
         const node = replacement.replace();
         if (!node) {
           return nodes;
@@ -62,6 +61,11 @@ class Replacer implements SinglyLinkedListNode {
       }, []);
     this.replacedNodes = replacedNodes;
 
+    if (!this.textNode.parentNode) {
+      // can't replace
+      return;
+    }
+
     this.textNode.parentNode.replaceChild(
       replacedNodes.reduce((fragment, replacedNode) => {
         fragment.appendChild(replacedNode);
@@ -71,7 +75,7 @@ class Replacer implements SinglyLinkedListNode {
     );
   }
 
-  recover() {
+  recover(): void {
     let recovered = false;
 
     for (let i = 0; i < this.replacedNodes.length; i++) {

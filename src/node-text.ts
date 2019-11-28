@@ -12,8 +12,11 @@ export interface TextNodeWithRange {
 }
 
 function getTextNodes(node: Node): Text[] {
+  const textNodes: Text[] = [];
+
   if (isTextNode(node)) {
-    return [node] as Text[];
+    textNodes.push(node as Text);
+    return textNodes;
   }
 
   const iterator = document.createNodeIterator(
@@ -25,7 +28,6 @@ function getTextNodes(node: Node): Text[] {
     // @ts-ignore
     false,
   );
-  const textNodes: Text[] = [];
 
   let textNode = iterator.nextNode();
   while (textNode) {
@@ -65,8 +67,8 @@ function getTextNodesDividedByBlock(root: Element): Text[][] {
   let latestParentBlock = root;
   result.push([]);
   while (stack.length > 0) {
-    const { node, parentBlock } = stack.pop();
-    const { firstChild, nextSibling } = node;
+    const { node, parentBlock } = stack.pop() as NodeWithClosestParentBlock;
+    const { firstChild, nextSibling, parentNode } = node;
 
     if (
       latestParentBlock !== parentBlock &&
@@ -94,20 +96,20 @@ function getTextNodesDividedByBlock(root: Element): Text[][] {
       if (nextSibling) {
         pendStack.push({
           node: nextSibling,
-          parentBlock: isBlockNode(nextSibling.parentNode)
-            ? (nextSibling.parentNode as Element)
+          parentBlock: isBlockNode(parentNode)
+            ? (parentNode as Element)
             : parentBlock,
         });
       }
     } else if (nextSibling) {
       stack.push({
         node: nextSibling,
-        parentBlock: isBlockNode(nextSibling.parentNode)
-          ? (nextSibling.parentNode as Element)
+        parentBlock: isBlockNode(parentNode)
+          ? (parentNode as Element)
           : parentBlock,
       });
     } else if (pendStack.length > 0) {
-      stack.push(pendStack.pop());
+      stack.push(pendStack.pop() as NodeWithClosestParentBlock);
     }
   }
 
@@ -122,15 +124,14 @@ function getTextWithRanges(
 
   for (let i = 0; i < textNodes.length; i++) {
     const textNode = textNodes[i];
-    const { nodeValue } = textNode;
     ranges.push({
       textNode,
       range: {
         start: text.length,
-        end: text.length + nodeValue.length,
+        end: text.length + (textNode.nodeValue as string).length,
       },
     });
-    text = `${text}${nodeValue}`;
+    text = `${text}${textNode.nodeValue as string}`;
   }
 
   return { text, ranges };

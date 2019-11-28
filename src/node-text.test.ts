@@ -15,48 +15,28 @@ const root = document.createElement('div');
 
 test('get text nodes from root node', () => {
   root.innerHTML = `<b>A</b><b>B</b>`;
-  /*
-    [A, B]
-  */
-  expect(getTextNodes(root)).toEqual([
-    root.firstChild.firstChild,
-    root.lastChild.lastChild,
-  ]);
+  expect(getTextNodes(root).map(node => node.nodeValue)).toEqual(['A', 'B']);
 });
 
 cases(
   'get text nodes divided by block',
-  (opts: any) => {
+  opts => {
     root.innerHTML = opts.name;
-    expect(getTextNodesDividedByBlock(root)).toEqual(opts.expecting(root));
+    expect(
+      getTextNodesDividedByBlock(root).map((nodes: Text[]) =>
+        nodes.map(node => (node.nodeValue as string).trim()),
+      ),
+    ).toEqual(opts.expected);
   },
   [
     {
       name: `A<br>B`,
-      /*
-        [
-          [A],
-          [B]
-        ]
-      */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild],
-        [root.lastChild],
-      ],
+      expected: [['A'], ['B']],
     },
 
     {
       name: `A<hr>B`,
-      /*
-        [
-          [A],
-          [B]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild],
-        [root.lastChild],
-      ],
+      expected: [['A'], ['B']],
     },
 
     {
@@ -71,38 +51,12 @@ cases(
         </div>
         <span>E</span>
       `),
-      /*
-        [
-          [A, B],
-          [C, D],
-          [E]
-        ]
-      */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [
-          root.firstChild.firstChild.firstChild,
-          root.firstChild.lastChild.firstChild,
-        ],
-        [
-          root.childNodes[1].firstChild.firstChild,
-          root.childNodes[1].lastChild.firstChild,
-        ],
-        [root.childNodes[2].firstChild],
-      ],
+      expected: [['A', 'B'], ['C', 'D'], ['E']],
     },
 
     {
       name: `<br>A<br>B`,
-      /*
-        [
-          [A],
-          [B]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.childNodes[1]],
-        [root.lastChild],
-      ],
+      expected: [['A'], ['B']],
     },
 
     {
@@ -116,62 +70,22 @@ cases(
           C
         </p>
       `),
-      /*
-        [
-          [A],
-          [B],
-          [C]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild.childNodes[1].firstChild],
-        [root.firstChild.childNodes[3]],
-        [root.firstChild.childNodes[5]],
-      ],
+      expected: [['A'], ['B'], ['C']],
     },
 
     {
       name: `A<img>B`,
-      /*
-        [
-          [A],
-          [B]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild],
-        [root.lastChild],
-      ],
+      expected: [['A'], ['B']],
     },
 
     {
       name: `A<svg></svg>B`,
-      /*
-        [
-          [A],
-          [B]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild],
-        [root.lastChild],
-      ],
+      expected: [['A'], ['B']],
     },
 
     {
       name: `A<div>B</div><span>C</span>`,
-      /*
-        [
-          [A],
-          [B],
-          [C]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild],
-        [root.childNodes[1].firstChild],
-        [root.lastChild.firstChild],
-      ],
+      expected: [['A'], ['B'], ['C']],
     },
 
     {
@@ -181,20 +95,7 @@ cases(
         <div>C</div>
         <span>D</span>
       `),
-      /*
-        [
-          [A],
-          [B],
-          [C],
-          [D]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild.firstChild],
-        [root.childNodes[1]],
-        [root.childNodes[2].firstChild],
-        [root.lastChild.firstChild],
-      ],
+      expected: [['A'], ['B'], ['C'], ['D']],
     },
 
     {
@@ -203,14 +104,7 @@ cases(
         <a>B</a>
         C
       `),
-      /*
-        [
-          [A, B, C]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild, root.childNodes[1].firstChild, root.lastChild],
-      ],
+      expected: [['A', 'B', 'C']],
     },
 
     {
@@ -222,18 +116,7 @@ cases(
         B
         <span>C</span>
       `),
-      /*
-        [
-          [A, B, C]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [
-          root.firstChild.firstChild,
-          root.childNodes[1],
-          root.lastChild.firstChild,
-        ],
-      ],
+      expected: [['A', 'B', 'C']],
     },
 
     {
@@ -248,17 +131,7 @@ cases(
           </p>
         </div>
       `),
-      /*
-        [
-          [A]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [
-          root.firstChild.firstChild.firstChild.firstChild.firstChild
-            .firstChild,
-        ],
-      ],
+      expected: [['A']],
     },
 
     {
@@ -271,15 +144,9 @@ cases(
         </span>
         <span>D</span>
       `),
-      /*
-        [
-          [A, B],
-          [C, D]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild.firstChild, root.childNodes[1].firstChild],
-        [root.childNodes[1].lastChild, root.lastChild.firstChild],
+      expected: [
+        ['A', 'B'],
+        ['C', 'D'],
       ],
     },
 
@@ -297,25 +164,14 @@ cases(
           </tbody>
         </table>
       `),
-      /*
-        [
-          [A],
-          [B],
-          [C]
-        ]
-       */
-      expecting: (root: Element): Array<Array<Node>> => [
-        [root.firstChild.firstChild.firstChild.firstChild.firstChild],
-        [root.firstChild.firstChild.firstChild.lastChild.firstChild],
-        [root.firstChild.firstChild.lastChild.firstChild.firstChild],
-      ],
+      expected: [['A'], ['B'], ['C']],
     },
   ],
 );
 
 cases(
   'gather text with text boundary from text nodes',
-  (opts: any) => {
+  opts => {
     root.innerHTML = opts.name;
     const textNodes = getTextNodes(root);
     expect(getTextWithRanges(textNodes)).toEqual(opts.expecting(textNodes));

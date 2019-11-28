@@ -189,33 +189,33 @@ const inlineNodeSet = new Set(inlineTextSemanticNodeSet);
 inlineNodeSet.delete('br');
 inlineNodeSet.delete('code');
 
-function isElementNode(node: Node): boolean {
-  return node.nodeType === Node.ELEMENT_NODE;
+function isElementNode(node: Node | null): boolean {
+  return !!node && node.nodeType === Node.ELEMENT_NODE;
 }
 
-function isTextNode(node: Node): boolean {
-  return node.nodeType === Node.TEXT_NODE;
+function isTextNode(node: Node | null): boolean {
+  return !!node && node.nodeType === Node.TEXT_NODE;
 }
 
-function isCommentNode(node: Node): boolean {
-  return node.nodeType === Node.COMMENT_NODE;
+function isCommentNode(node: Node | null): boolean {
+  return !!node && node.nodeType === Node.COMMENT_NODE;
 }
 
-function isBlockNode(node: Node): boolean {
+function isBlockNode(node: Node | null): boolean {
   return (
     isElementNode(node) &&
     !!blockNodeSet.has((node as Element).tagName.toLocaleLowerCase())
   );
 }
 
-function isInlineNode(node: Node): boolean {
+function isInlineNode(node: Node | null): boolean {
   return (
     isElementNode(node) &&
     !!inlineNodeSet.has((node as Element).tagName.toLocaleLowerCase())
   );
 }
 
-function isSelfClosingNode(node: Node): boolean {
+function isSelfClosingNode(node: Node | null): boolean {
   return (
     isElementNode(node) &&
     !!selfClosingNodeSet.has((node as Element).tagName.toLocaleLowerCase())

@@ -43,8 +43,8 @@ function withinElement(
       const [foundText] = regexpExecResult;
       const regexpEndIndex = regexpStartIndex + foundText.length;
 
-      let copyOfReplaceText = typeof replace === 'string' && replace;
-      let copyOfFoundText = typeof replace === 'string' && foundText;
+      let copyOfReplaceText = typeof replace === 'string' ? replace : '';
+      let copyOfFoundText = typeof replace === 'string' ? foundText : '';
       let slicedReplaceText = '';
 
       for (let i = 0; i < ranges.length; i++) {
@@ -54,7 +54,7 @@ function withinElement(
         } = ranges[i];
 
         const replacement: Replacement = new Replacement(
-          textNode.nodeValue,
+          textNode.nodeValue as string,
           foundText,
         );
         if (
@@ -120,7 +120,7 @@ function withinElement(
             slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
             copyOfReplaceText = '';
           }
-          replacement.replaceFunction = (slicedReplaceText => () =>
+          replacement.replaceFunction = (slicedReplaceText => (): Text =>
             document.createTextNode(slicedReplaceText))(slicedReplaceText);
         } else {
           replacement.replaceFunction = replace as ReplaceFunction;
@@ -147,7 +147,7 @@ function withinElement(
     }
 
     // recover
-    return () => {
+    return (): void => {
       let replacer = singlyLinkedList.head;
       while (replacer) {
         replacer.recover();
@@ -170,7 +170,7 @@ function withinHTML(html: string, options: Options): string {
 export default function findAndReplace(
   target: Element | string,
   options: Options,
-): Recover | string {
+): Recover | string | null {
   const optionsWithDefault = Object.assign(
     {},
     {

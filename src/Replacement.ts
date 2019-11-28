@@ -11,19 +11,24 @@ class Replacement {
   replaceFunction: ReplaceFunction;
 
   constructor(text: string, foundText?: string) {
-    this.foundText = foundText;
+    this.foundText = foundText || '';
     this.text = text;
-    this.replaceFunction = offsetText => document.createTextNode(offsetText);
+    this.range = {
+      start: 0,
+      end: 0,
+    };
+    this.replaceFunction = (offsetText): Text =>
+      document.createTextNode(offsetText);
   }
 
-  replace(): Node {
+  replace(): Node | null {
     const { start, end } = this.range;
     if (start === end) {
       return null;
     }
 
     const offsetText = this.text.slice(start, end);
-    return this.replaceFunction(offsetText, this.foundText) as Node;
+    return this.replaceFunction(offsetText, this.foundText);
   }
 }
 
