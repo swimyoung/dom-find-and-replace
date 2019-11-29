@@ -1,12 +1,6 @@
 <template>
   <div>
-    <div
-      class="content"
-      contenteditable="true"
-      v-once
-      @input="handleInput"
-      ref="contenteditable"
-    ></div>
+    <div v-once ref="contenteditable" class="content" contenteditable="true" @input="handleInput"></div>
     <div class="invisible" v-html="value[0]"></div>
   </div>
 </template>
@@ -16,15 +10,10 @@ import Vue from 'vue';
 
 export default Vue.extend({
   props: {
-    value: String,
-  },
-  methods: {
-    handleInput(event: Event) {
-      this.$emit('input', (event.target as Element).innerHTML);
-    },
-    renderContent(content: string) {
-      const el = this.$refs.contenteditable as Element;
-      el.innerHTML = content;
+    value: {
+      type: String,
+      default: '',
+      required: false,
     },
   },
   mounted() {
@@ -35,6 +24,15 @@ export default Vue.extend({
     if (this.value !== el.innerHTML) {
       this.renderContent(this.value);
     }
+  },
+  methods: {
+    handleInput(event: Event) {
+      this.$emit('input', (event.target as Element).innerHTML);
+    },
+    renderContent(content: string) {
+      const el = this.$refs.contenteditable as Element;
+      el.innerHTML = content;
+    },
   },
 });
 </script>

@@ -6,18 +6,18 @@
     <section>
       <p>Find some text in DOM and replace with what you want</p>
       <input
-        class="query"
         v-model="find"
+        class="query"
         placeholder="find (regular expression)"
       />
-      <input class="query" v-model="replace" placeholder="replace" />
+      <input v-model="replace" class="query" placeholder="replace" />
       <p>
         detail at
         <a href="https://github.com/swimyoung/dom-find-and-replace"
           >README.md</a
         >
       </p>
-      <Editor v-bind:value="visibleContent" @input="handleInput" />
+      <BaseEditor :value="visibleContent" @input="handleInput" />
     </section>
   </div>
 </template>
@@ -25,14 +25,17 @@
 <script lang="ts">
 import Vue from 'vue';
 import randomColor from 'randomcolor';
-import Editor from './components/Editor.vue';
+import BaseEditor from './components/BaseEditor.vue';
 import { makeRandomHTML } from '@/utils/randomContent';
 import findAndReplace from 'dom-find-and-replace';
 
 const initialContent = makeRandomHTML();
 
 export default Vue.extend({
-  name: 'app',
+  name: 'App',
+  components: {
+    BaseEditor,
+  },
   data() {
     return {
       targetContent: initialContent,
@@ -41,9 +44,6 @@ export default Vue.extend({
       find: '',
       replace: '',
     };
-  },
-  mounted() {
-    this.find = 'http';
   },
   watch: {
     find(value) {
@@ -85,8 +85,8 @@ export default Vue.extend({
       }) as string;
     },
   },
-  components: {
-    Editor,
+  mounted() {
+    this.find = 'http';
   },
   methods: {
     handleInput(content: string) {
