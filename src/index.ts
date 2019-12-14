@@ -21,143 +21,147 @@ function withinElement(
   const textNodesDividedByBlock = getTextNodesDividedByBlock(element);
 
   // find and replace line by line
-  const recovers = textNodesDividedByBlock.map(textNodes => {
-    const { text: oneLineOfText, ranges } = getTextWithRanges(textNodes);
-    const regex = new RegExp(find, flag);
-    const map = new Map();
-    const singlyLinkedList = new SinglyLinkedList<Replacer>();
+  const recovers: Array<Function | null> = textNodesDividedByBlock.map(
+    textNodes => {
+      const { text: oneLineOfText, ranges } = getTextWithRanges(textNodes);
+      const regex = new RegExp(find, flag);
+      const map = new Map();
+      const singlyLinkedList = new SinglyLinkedList<Replacer>();
 
-    let regexpExecResult = regex.exec(oneLineOfText);
-    if (!regexpExecResult) {
-      return (): void => {};
-    }
-
-    // find
-    while (regexpExecResult) {
-      // Avoid zero length matches
-      if (!regexpExecResult[0]) {
-        break;
+      let regexpExecResult = regex.exec(oneLineOfText);
+      if (!regexpExecResult) {
+        return null;
       }
 
-      const { index: regexpStartIndex } = regexpExecResult;
-      const [foundText] = regexpExecResult;
-      const regexpEndIndex = regexpStartIndex + foundText.length;
-
-      let copyOfReplaceText = typeof replace === 'string' ? replace : '';
-      let copyOfFoundText = typeof replace === 'string' ? foundText : '';
-      let slicedReplaceText = '';
-
-      for (let i = 0; i < ranges.length; i++) {
-        const {
-          textNode,
-          range: { start, end },
-        } = ranges[i];
-
-        const replacement: Replacement = new Replacement(
-          textNode.nodeValue as string,
-          foundText,
-        );
-        if (
-          // regexpStartIndex <= start < regexpEndIndex
-          start >= regexpStartIndex &&
-          start < regexpEndIndex
-        ) {
-          replacement.range = {
-            start,
-            end: end < regexpEndIndex ? end : regexpEndIndex,
-          };
-        } else if (
-          // regexpStartIndex < end <= regexpEndIndex
-          end > regexpStartIndex &&
-          end <= regexpEndIndex
-        ) {
-          replacement.range = {
-            start: start < regexpStartIndex ? regexpStartIndex : start,
-            end,
-          };
-        } else if (
-          // start <= regexpStartIndex < end
-          regexpStartIndex >= start &&
-          regexpStartIndex < end
-        ) {
-          replacement.range = {
-            start: regexpStartIndex,
-            end: end < regexpEndIndex ? end : regexpEndIndex,
-          };
-        } else if (
-          // start < regexpEndIndex <= end
-          regexpEndIndex > start &&
-          regexpEndIndex <= end
-        ) {
-          replacement.range = {
-            start: start < regexpStartIndex ? regexpStartIndex : start,
-            end: regexpEndIndex,
-          };
-        } else if (start === regexpStartIndex && end === regexpEndIndex) {
-          replacement.range = { start, end };
-        } else {
-          continue;
+      // find
+      while (regexpExecResult) {
+        // Avoid zero length matches
+        if (!regexpExecResult[0]) {
+          break;
         }
 
-        // change range to textNode.nodeValue size based range
-        replacement.range = {
-          start: replacement.range.start - start,
-          end: replacement.range.end - start,
-        };
+        const { index: regexpStartIndex } = regexpExecResult;
+        const [foundText] = regexpExecResult;
+        const regexpEndIndex = regexpStartIndex + foundText.length;
 
-        if (typeof replace === 'string') {
-          const { range } = replacement;
-          slicedReplaceText = copyOfReplaceText.slice(
-            0,
-            range.end - range.start,
+        let copyOfReplaceText = typeof replace === 'string' ? replace : '';
+        let copyOfFoundText = typeof replace === 'string' ? foundText : '';
+        let slicedReplaceText = '';
+
+        for (let i = 0; i < ranges.length; i++) {
+          const {
+            textNode,
+            range: { start, end },
+          } = ranges[i];
+
+          const replacement: Replacement = new Replacement(
+            textNode.nodeValue as string,
+            foundText,
           );
-          copyOfReplaceText = copyOfReplaceText.slice(range.end - range.start);
-          copyOfFoundText = copyOfFoundText.slice(range.end - range.start);
-
-          // replace text is longer than found text.
-          // so put all replace text to last offset text of found text.
-          if (!copyOfFoundText && copyOfReplaceText.length > 0) {
-            slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
-            copyOfReplaceText = '';
+          if (
+            // regexpStartIndex <= start < regexpEndIndex
+            start >= regexpStartIndex &&
+            start < regexpEndIndex
+          ) {
+            replacement.range = {
+              start,
+              end: end < regexpEndIndex ? end : regexpEndIndex,
+            };
+          } else if (
+            // regexpStartIndex < end <= regexpEndIndex
+            end > regexpStartIndex &&
+            end <= regexpEndIndex
+          ) {
+            replacement.range = {
+              start: start < regexpStartIndex ? regexpStartIndex : start,
+              end,
+            };
+          } else if (
+            // start <= regexpStartIndex < end
+            regexpStartIndex >= start &&
+            regexpStartIndex < end
+          ) {
+            replacement.range = {
+              start: regexpStartIndex,
+              end: end < regexpEndIndex ? end : regexpEndIndex,
+            };
+          } else if (
+            // start < regexpEndIndex <= end
+            regexpEndIndex > start &&
+            regexpEndIndex <= end
+          ) {
+            replacement.range = {
+              start: start < regexpStartIndex ? regexpStartIndex : start,
+              end: regexpEndIndex,
+            };
+          } else if (start === regexpStartIndex && end === regexpEndIndex) {
+            replacement.range = { start, end };
+          } else {
+            continue;
           }
-          replacement.replaceFunction = (slicedReplaceText => (): Text =>
-            document.createTextNode(slicedReplaceText))(slicedReplaceText);
-        } else {
-          replacement.replaceFunction = replace as ReplaceFunction;
+
+          // change range to textNode.nodeValue size based range
+          replacement.range = {
+            start: replacement.range.start - start,
+            end: replacement.range.end - start,
+          };
+
+          if (typeof replace === 'string') {
+            const { range } = replacement;
+            slicedReplaceText = copyOfReplaceText.slice(
+              0,
+              range.end - range.start,
+            );
+            copyOfReplaceText = copyOfReplaceText.slice(
+              range.end - range.start,
+            );
+            copyOfFoundText = copyOfFoundText.slice(range.end - range.start);
+
+            // replace text is longer than found text.
+            // so put all replace text to last offset text of found text.
+            if (!copyOfFoundText && copyOfReplaceText.length > 0) {
+              slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
+              copyOfReplaceText = '';
+            }
+            replacement.replaceFunction = (slicedReplaceText => (): Text =>
+              document.createTextNode(slicedReplaceText))(slicedReplaceText);
+          } else {
+            replacement.replaceFunction = replace as ReplaceFunction;
+          }
+
+          let replacer: Replacer = map.get(textNode);
+          if (!replacer) {
+            replacer = new Replacer(textNode);
+            singlyLinkedList.add(replacer);
+            map.set(textNode, replacer);
+          }
+
+          replacer.addReplacement(replacement);
         }
 
-        let replacer: Replacer = map.get(textNode);
-        if (!replacer) {
-          replacer = new Replacer(textNode);
-          singlyLinkedList.add(replacer);
-          map.set(textNode, replacer);
-        }
-
-        replacer.addReplacement(replacement);
+        regexpExecResult = regex.exec(oneLineOfText);
       }
 
-      regexpExecResult = regex.exec(oneLineOfText);
-    }
-
-    // replace
-    let replacer = singlyLinkedList.head;
-    while (replacer) {
-      replacer.replace();
-      replacer = replacer.next;
-    }
-
-    // recover
-    return (): void => {
+      // replace
       let replacer = singlyLinkedList.head;
       while (replacer) {
-        replacer.recover();
+        replacer.replace();
         replacer = replacer.next;
       }
-    };
-  });
+
+      // recover
+      return (): void => {
+        let replacer = singlyLinkedList.head;
+        while (replacer) {
+          replacer.recover();
+          replacer = replacer.next;
+        }
+      };
+    },
+  );
 
   // recover
-  return (): void => recovers.forEach(recover => recover());
+  return (): void => recovers.forEach(recover => recover && recover());
 }
 
 function withinHTML(html: string, options: Options): string {
