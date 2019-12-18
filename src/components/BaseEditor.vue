@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div v-once ref="contenteditable" class="content" contenteditable="true" @input="handleInput"></div>
+    <div
+      v-once
+      ref="contenteditable"
+      class="content"
+      contenteditable="true"
+      @input="handleInput"
+    ></div>
     <div class="invisible" v-html="value[0]"></div>
   </div>
 </template>
