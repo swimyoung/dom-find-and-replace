@@ -3,7 +3,7 @@ import {
   isSelfClosingNode,
   isTextNode,
   isBlockNode,
-} from './node-type';
+} from 'dom-node-type';
 import { Range } from './Range';
 
 export interface TextNodeWithRange {

@@ -1,4 +1,4 @@
-import { isElementNode } from './node-type';
+import { isElementNode } from 'dom-node-type';
 import { getTextNodesDividedByBlock, getTextWithRanges } from './node-text';
 import { Replacement, ReplaceFunction } from './Replacement';
 import { Replacer } from './Replacer';
