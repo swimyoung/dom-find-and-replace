@@ -183,7 +183,7 @@ describe('find and replace', () => {
 
     const recover = findAndReplace(root, {
       find: 'hello',
-      replace: offsetText => {
+      replace: (offsetText) => {
         const bold = document.createElement('b');
         bold.textContent = offsetText;
         return bold;

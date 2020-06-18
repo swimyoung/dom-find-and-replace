@@ -15,16 +15,16 @@ const root = document.createElement('div');
 
 test('get text nodes from root node', () => {
   root.innerHTML = `<b>A</b><b>B</b>`;
-  expect(getTextNodes(root).map(node => node.nodeValue)).toEqual(['A', 'B']);
+  expect(getTextNodes(root).map((node) => node.nodeValue)).toEqual(['A', 'B']);
 });
 
 cases(
   'get text nodes divided by block',
-  opts => {
+  (opts) => {
     root.innerHTML = opts.name;
     expect(
       getTextNodesDividedByBlock(root).map((nodes: Text[]) =>
-        nodes.map(node => (node.nodeValue as string).trim()),
+        nodes.map((node) => (node.nodeValue as string).trim()),
       ),
     ).toEqual(opts.expected);
   },
@@ -171,7 +171,7 @@ cases(
 
 cases(
   'gather text with text boundary from text nodes',
-  opts => {
+  (opts) => {
     root.innerHTML = opts.name;
     const textNodes = getTextNodes(root);
     expect(getTextWithRanges(textNodes)).toEqual(opts.expecting(textNodes));

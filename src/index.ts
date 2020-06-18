@@ -21,8 +21,8 @@ function withinElement(
   const textNodesDividedByBlock = getTextNodesDividedByBlock(element);
 
   // find and replace line by line
-  const recovers: Array<Function | null> = textNodesDividedByBlock.map(
-    textNodes => {
+  const recovers: Array<() => void | null> = textNodesDividedByBlock.map(
+    (textNodes) => {
       const { text: oneLineOfText, ranges } = getTextWithRanges(textNodes);
       const regex = new RegExp(find, flag);
       const map = new Map();
@@ -123,7 +123,7 @@ function withinElement(
               slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
               copyOfReplaceText = '';
             }
-            replacement.replaceFunction = (slicedReplaceText => (): Text =>
+            replacement.replaceFunction = ((slicedReplaceText) => (): Text =>
               document.createTextNode(slicedReplaceText))(slicedReplaceText);
           } else {
             replacement.replaceFunction = replace as ReplaceFunction;
@@ -161,7 +161,12 @@ function withinElement(
   );
 
   // recover
-  return (): void => recovers.forEach(recover => recover && recover());
+  return (): void =>
+    recovers.forEach((recover) => {
+      if (recover) {
+        recover();
+      }
+    });
 }
 
 function withinHTML(html: string, options: Options): string {
