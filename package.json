@@ -20,7 +20,7 @@
     "report": "codecov",
     "format": "prettier --write \"**/*.ts\"",
     "lint": "eslint --ext .ts .",
-    "tsc:dry": "tsc --noEmit",
+    "tsc:dry": "tsc --noEmit --esModuleInterop",
     "transpile:esm": "tsc -p tsconfig.json",
     "transpile:cjs": "tsc -p tsconfig.cjs.json",
     "dist": "rimraf dist && run-p transpile:*",
