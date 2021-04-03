@@ -197,4 +197,4 @@ export default function findAndReplace(
   }
 }
 
-export { Recover };
+export { findAndReplace, Recover };

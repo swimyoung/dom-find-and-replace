@@ -2,11 +2,10 @@
 
 # DOM find and replace 🔎
 
-Find some text in the dom and replace with what you want.
+Find some text in the dom and replace with what you want. It only supports browser environment
 
-you can try it!
+Demo: https://swimyoung.github.io/dom-find-and-replace/
 
-https://swimyoung.github.io/dom-find-and-replace/
 
 ## Getting started
 
@@ -15,10 +14,10 @@ npm install dom-find-and-replace
 ```
 
 ```js
-import domFindAndReplace from 'dom-find-and-replace';
+import { findAndReplace } from 'dom-find-and-replace';
 
 // return: function that recover replacement
-const recover = domFindAndReplace(
+const recover = findAndReplace(
   document.getElementById('container'), 
   {
     find: 'hello',
@@ -27,7 +26,7 @@ const recover = domFindAndReplace(
 );
 
 // return: html
-const html = domFindAndReplace(
+const html = findAndReplace(
   `<div>hello</div>`, 
   {
     find: 'hello',
@@ -38,7 +37,7 @@ const html = domFindAndReplace(
 
 ## API
 
-### domFindAndReplace
+### findAndReplace
 
 #### Arguments
 
@@ -55,16 +54,16 @@ const html = domFindAndReplace(
 #### Examples
 
 ```js
-import domFindAndReplace from 'dom-find-and-replace';
+import { findAndReplace } from 'dom-find-and-replace';
 
 // find 'hello' in id 'container' element and replace it with 'hi'
-const recover = domFindAndReplace(document.getElementById('container'), {
+const recover = findAndReplace(document.getElementById('container'), {
   find: 'hello',
   replace: 'hi',
 });
 
 // find 'hello' in id 'container' element and wrap with bold element
-const recover = domFindAndReplace(document.getElementById('container'), {
+const recover = findAndReplace(document.getElementById('container'), {
   find: 'hello',
 
   /**
@@ -80,7 +79,7 @@ const recover = domFindAndReplace(document.getElementById('container'), {
 });
 
 // find link in id 'root' element and make an anchor element
-const recover = domFindAndReplace(document.getElementById('root'), {
+const recover = findAndReplace(document.getElementById('root'), {
   flag: 'gi',
 
   // @see https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url for url matching regular expression

@@ -1,4 +1,4 @@
-import findAndReplace, { Recover } from './index';
+import { findAndReplace, Recover } from './index';
 
 describe('find and replace', () => {
   let root: Element;
