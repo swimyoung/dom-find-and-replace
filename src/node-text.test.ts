@@ -22,6 +22,7 @@ cases(
   'get text nodes divided by block',
   (opts) => {
     root.innerHTML = opts.name;
+    //eslint-disable-next-line jest/no-standalone-expect
     expect(
       getTextNodesDividedByBlock(root).map((nodes: Text[]) =>
         nodes.map((node) => (node.nodeValue as string).trim()),
@@ -174,6 +175,7 @@ cases(
   (opts) => {
     root.innerHTML = opts.name;
     const textNodes = getTextNodes(root);
+    //eslint-disable-next-line jest/no-standalone-expect
     expect(getTextWithRanges(textNodes)).toEqual(opts.expecting(textNodes));
   },
   [
