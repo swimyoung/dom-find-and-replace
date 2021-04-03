@@ -1,5 +1,6 @@
 {
   "src/**/*.ts": [
+    "npm run tsc:dry",
     "npm run format",
     "npm run lint -- --fix",
     "git add"
