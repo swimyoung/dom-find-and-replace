@@ -17,10 +17,10 @@ function makeRandomContent(): string {
 
 function makeRandomHTML(): string {
   return `<ul>${Array.from({ length: 5 }).reduce(
-    html =>
+    (html) =>
       html +
       `<li>${Array.from({ length: 5 }).reduce(
-        html =>
+        (html) =>
           (html += `<span style="font-size: ${chance.integer({
             min: 7,
             max: 30,
@@ -33,9 +33,9 @@ function makeRandomHTML(): string {
     '',
   )}</ul>
   ${Array.from({ length: 1 }).reduce(
-    html =>
+    (html) =>
       html +
-      `<p>${Array.from({ length: 15 }).reduce(html => {
+      `<p>${Array.from({ length: 15 }).reduce((html) => {
         const randomChanceContent = makeRandomContent().split('');
         while (randomChanceContent.length > 10) {
           const offset = chance.integer({

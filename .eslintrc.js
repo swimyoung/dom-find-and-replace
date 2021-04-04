@@ -1,25 +1,14 @@
 module.exports = {
-  root: true,
+  parser: '@typescript-eslint/parser',
   env: {
+    browser: true,
     node: true,
   },
-  extends: ['plugin:vue/recommended', '@vue/prettier', '@vue/typescript'],
-  rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-  },
-  parserOptions: {
-    parser: '@typescript-eslint/parser',
-  },
-  overrides: [
-    {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)',
-      ],
-      env: {
-        jest: true,
-      },
-    },
+  plugins: ['@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:jest/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
   ],
 };
