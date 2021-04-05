@@ -23,9 +23,7 @@
     "tsc:dry": "tsc --noEmit --esModuleInterop",
     "transpile:esm": "tsc -p tsconfig.json",
     "transpile:cjs": "tsc -p tsconfig.cjs.json",
-    "dist": "rimraf dist && run-p transpile:*",
-    "prepublish": "npm run dist",
-    "prepare": "husky install"
+    "dist": "rimraf dist && run-p transpile:*"
   },
   "devDependencies": {
     "@types/jest": "26.0.22",
