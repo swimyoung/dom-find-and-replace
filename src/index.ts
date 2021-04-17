@@ -38,7 +38,7 @@ const find = ((recover: Recover) => (value: string) => {
     },
   }) as Recover;
 
-  state.replace = '';
+  Object.assign(state, { find: value, replace: '' });
 })(() => undefined);
 
 const replace = ((recover: Recover) => (value: string) => {
@@ -55,6 +55,7 @@ const replace = ((recover: Recover) => (value: string) => {
     find: state.find,
     replace: value,
   }) as Recover;
+  Object.assign(state, { replace: value });
 })(() => undefined);
 
 elements.find?.addEventListener('input', (event) => {
