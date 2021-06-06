@@ -26,7 +26,7 @@ function withinElement(
       const { text: oneLineOfText, ranges } = getTextWithRanges(textNodes);
       const regex = new RegExp(find, flag);
       const map = new Map();
-      const singlyLinkedList = new SinglyLinkedList<Replacer>();
+      let singlyLinkedList = new SinglyLinkedList<Replacer>();
 
       let regexpExecResult = regex.exec(oneLineOfText);
       if (!regexpExecResult) {
@@ -139,6 +139,8 @@ function withinElement(
 
         regexpExecResult = regex.exec(oneLineOfText);
       }
+      // remove text node reference
+      map.clear();
 
       // replace
       let replacer = singlyLinkedList.head;
@@ -154,6 +156,9 @@ function withinElement(
           replacer.recover();
           replacer = replacer.next;
         }
+
+        // release linked list memory
+        singlyLinkedList = null;
       };
     },
   );
