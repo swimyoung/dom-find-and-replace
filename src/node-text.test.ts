@@ -188,6 +188,7 @@ cases(
         ranges: [
           {
             textNode: textNodes[0],
+            text: 'A',
             range: {
               start: 0,
               end: 1,
@@ -195,6 +196,7 @@ cases(
           },
           {
             textNode: textNodes[1],
+            text: 'B',
             range: {
               start: 1,
               end: 2,

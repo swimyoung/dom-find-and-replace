@@ -51,13 +51,11 @@ function withinElement(
         for (let i = 0; i < ranges.length; i++) {
           const {
             textNode,
+            text,
             range: { start, end },
           } = ranges[i];
 
-          const replacement: Replacement = new Replacement(
-            textNode.nodeValue as string,
-            foundText,
-          );
+          const replacement: Replacement = new Replacement(text, foundText);
           if (
             // regexpStartIndex <= start < regexpEndIndex
             start >= regexpStartIndex &&

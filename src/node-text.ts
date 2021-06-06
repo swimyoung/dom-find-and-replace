@@ -8,6 +8,7 @@ import { Range } from './Range';
 
 export interface TextNodeWithRange {
   textNode: Text;
+  text: string;
   range: Range;
 }
 
@@ -126,6 +127,7 @@ function getTextWithRanges(
     const textNode = textNodes[i];
     ranges.push({
       textNode,
+      text: textNode.nodeValue,
       range: {
         start: text.length,
         end: text.length + (textNode.nodeValue as string).length,
