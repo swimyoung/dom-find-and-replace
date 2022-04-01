@@ -116,7 +116,7 @@ function withinElement(
 
       // recover
       return (): void => {
-        let replacer = singlyLinkedList.head;
+        let replacer = singlyLinkedList?.head;
         while (replacer) {
           replacer.recover();
           replacer = replacer.next;
@@ -131,7 +131,7 @@ function withinElement(
   // recover
   return (): void =>
     recovers.forEach((recover) => {
-      recover();
+      recover?.();
     });
 }
 
