@@ -55,55 +55,20 @@ function withinElement(
             range: { start, end },
           } = ranges[i];
 
-          const replacement: Replacement = new Replacement(text, foundText);
-          if (
-            // regexpStartIndex <= start < regexpEndIndex
-            start >= regexpStartIndex &&
-            start < regexpEndIndex
-          ) {
-            replacement.range = {
-              start,
-              end: end < regexpEndIndex ? end : regexpEndIndex,
-            };
-          } else if (
-            // regexpStartIndex < end <= regexpEndIndex
-            end > regexpStartIndex &&
-            end <= regexpEndIndex
-          ) {
-            replacement.range = {
-              start: start < regexpStartIndex ? regexpStartIndex : start,
-              end,
-            };
-          } else if (
-            // start <= regexpStartIndex < end
-            regexpStartIndex >= start &&
-            regexpStartIndex < end
-          ) {
-            replacement.range = {
-              start: regexpStartIndex,
-              end: end < regexpEndIndex ? end : regexpEndIndex,
-            };
-          } else if (
-            // start < regexpEndIndex <= end
-            regexpEndIndex > start &&
-            regexpEndIndex <= end
-          ) {
-            replacement.range = {
-              start: start < regexpStartIndex ? regexpStartIndex : start,
-              end: regexpEndIndex,
-            };
-          } else if (start === regexpStartIndex && end === regexpEndIndex) {
-            replacement.range = { start, end };
-          } else {
+          // there isn't overlap between node range and regular expression range
+          if (start > regexpEndIndex || end < regexpStartIndex) {
             continue;
           }
 
-          // change range to textNode.nodeValue size based range
+          const replacement: Replacement = new Replacement(text, foundText);
+          // calculate overlap range between node range and regular expression range
+          // and change the result to textNode.nodeValue size based range
           replacement.range = {
-            start: replacement.range.start - start,
-            end: replacement.range.end - start,
+            start: Math.max(start, regexpStartIndex) - start,
+            end: Math.min(end, regexpEndIndex) - start,
           };
 
+          // make replace function
           if (typeof replace === 'string') {
             const { range } = replacement;
             slicedReplaceText = copyOfReplaceText.slice(
@@ -116,7 +81,7 @@ function withinElement(
             copyOfFoundText = copyOfFoundText.slice(range.end - range.start);
 
             // replace text is longer than found text.
-            // so put all replace text to last offset text of found text.
+            // put all replace text to last offset text of found text.
             if (!copyOfFoundText && copyOfReplaceText.length > 0) {
               slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
               copyOfReplaceText = '';
@@ -151,7 +116,7 @@ function withinElement(
 
       // recover
       return (): void => {
-        let replacer = singlyLinkedList?.head;
+        let replacer = singlyLinkedList.head;
         while (replacer) {
           replacer.recover();
           replacer = replacer.next;
@@ -166,9 +131,7 @@ function withinElement(
   // recover
   return (): void =>
     recovers.forEach((recover) => {
-      if (recover) {
-        recover();
-      }
+      recover();
     });
 }
 

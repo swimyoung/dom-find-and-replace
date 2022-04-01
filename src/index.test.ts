@@ -217,3 +217,21 @@ describe('find and replace', () => {
     expect(root.innerHTML).toBe(`http://www.foo.com\nhttps://www.foo.com`);
   });
 });
+
+test('Multiple line', () => {
+  expect(
+    findAndReplace('<div>hello</div><div>world</div><div>hello</div>', {
+      find: 'hello',
+      replace: 'HELLO',
+    }),
+  ).toBe('<div>HELLO</div><div>world</div><div>HELLO</div>');
+});
+
+test('Zero-Length Matches', () => {
+  expect(
+    findAndReplace('<div>1,2</div>', {
+      find: '\\b',
+      replace: '3',
+    }),
+  ).toBe('<div>1,2</div>');
+});
