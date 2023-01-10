@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Dom find and replace</title>
+  </head>
+  <body>
+    <noscript>
+      <strong
+        >We're sorry but Dom find and replace doesn't work properly without
+        JavaScript enabled. Please enable it to continue.</strong
+      >
+    </noscript>
+    <div id="app"></div>
+    <header>
+      <h1>DOM find and replace</h1>
+    </header>
+    <section>
+      <p>Find some text in DOM and replace with what you want</p>
+      <input
+        id="query-find"
+        class="query"
+        placeholder="find (regular expression)"
+      />
+      <input id="query-replace" class="query" placeholder="replace" />
+      <p>
+        detail at
+        <a href="https://github.com/swimyoung/dom-find-and-replace"
+          >README.md</a
+        >
+      </p>
+    </section>
+    <section>
+      <div id="content" class="content" contenteditable="true"></div>
+    </section>
+
+    <script type="module" src="/index.ts"></script>
+  </body>
+</html>

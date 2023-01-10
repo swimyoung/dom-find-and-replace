@@ -86,8 +86,10 @@ function withinElement(
               slicedReplaceText = `${slicedReplaceText}${copyOfReplaceText}`;
               copyOfReplaceText = '';
             }
-            replacement.replaceFunction = ((slicedReplaceText) => (): Text =>
-              document.createTextNode(slicedReplaceText))(slicedReplaceText);
+            replacement.replaceFunction = (
+              (slicedReplaceText) => (): Text =>
+                document.createTextNode(slicedReplaceText)
+            )(slicedReplaceText);
           } else {
             replacement.replaceFunction = replace as ReplaceFunction;
           }

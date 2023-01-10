@@ -1,4 +1,4 @@
-import { Range } from './Range';
+import type { Range } from './Range';
 
 interface ReplaceFunction {
   (offsetText: string, foundText: string): Node;
